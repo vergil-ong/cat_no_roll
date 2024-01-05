@@ -57,7 +57,6 @@
         呱唧呱唧～
     </div>
     <div class="row" style="padding: 5px;">
-
     </div>
 </div>
 <div>
@@ -143,8 +142,8 @@
         if (isAndroid) {
             u = u.toLowerCase();
             if (u.match(/MicroMessenger/i) == 'micromessenger') {
-                $("#wiexinModal").modal("show");
-                $("#photo").removeAttr("multiple");
+                // $("#wiexinModal").modal("show");
+                // $("#photo").removeAttr("multiple");
             }
         }
 
@@ -262,9 +261,39 @@
     function loadImgs() {
         $.post("/api/upload/orderImgs?code=${code}", function (res) {
             //alert(33333);
-            $("#imgDiv").html(res);
+            drawImageCard(res);
             $("#img_count").html($("#imgDiv").find("img").length);
         })
+    }
+
+    function drawImageCard(res) {
+        if (!res) {
+            return
+        }
+        let resHtml = "<div class=\"alert alert-warning\" role=\"alert\" style=\"font-size: 14px;\">\n" +
+            "这个位置也要留给卓总讲话 <br/>\n"+
+            "来呱唧呱唧<br/>\n"+
+            "呱唧呱唧～\n"+
+            "</div>\n" +
+            "\n" +
+            "<div class=\"row\" style=\"padding: 5px;\" >\n";
+        for (const resMap of res) {
+            let path = resMap.path;
+            let fileName = resMap.fileName;
+            resHtml += "<div class=\"col-6 col-md-3 \" style=\" padding: 0;padding-left: 7px;margin-bottom: 15px; \">\n" +
+                "           <div class=\"card h-100 border-info\">\n" +
+                "            <img src=\""+path+"\" class=\"card-img-top\">\n" +
+                "            <div class=\"card-body\" style=\"padding:3px\"></div>\n" +
+                "            <div class=\"card-footer bg-transparent\">\n" +
+                "                <button type=\"button\" data-id=\"38437\" class=\"upbut btn  btn-light\" onclick=\"delImg('"+fileName+"')\"  style=\"font-size:1.5rem;border-radius: 0.5rem;\">\n" +
+                "                    删除\n" +
+                "                </button>\n" +
+                "            </div>\n" +
+                "        </div>\n" +
+                "      </div>\n" ;
+        }
+        resHtml +=  "</div>";
+        $("#imgDiv").html(resHtml);
     }
 </script>
 </body>

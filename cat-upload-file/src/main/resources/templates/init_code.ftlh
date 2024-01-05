@@ -7,6 +7,10 @@
     <script src='/static/js/jquery.js'></script>
     <script src='/static/js/bootstrap.bundle.js'></script>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
+
+    <script src="/static/js/driver.min.js"></script>
+    <link rel="stylesheet" href="/static/css/driver.min.css"/>
+
     <style>
         html {
             font-size: 62.5%;
@@ -46,6 +50,11 @@
             top: -130px;
         }
 
+        [class*="driver-close-btn"] {
+            visibility: hidden;
+        }
+
+
     </style>
 </head>
 <body>
@@ -72,7 +81,7 @@
                         <a href="#" style="font-size: 1.6rem;float: right">不知道怎么复制订单号？</a>
                     </small>-->
                 </div>
-                <div style="text-align: center">
+                <div style="text-align: center" id="uploadBtnDiv">
                     <a onclick="submitOrder(this)" class="btn-lg btn-info btn-block"
                        style="background-color: #9a5c07; font-size:2rem;border-radius: 0.8rem;margin-top: 10rem ">
                         点击开始上传
@@ -121,7 +130,7 @@
     });
 
 
-    $('#staticBackdrop').modal("show");
+    // $('#staticBackdrop').modal("show");
     function closeModal() {
         $('#staticBackdrop').modal("hide");
     }
@@ -151,6 +160,54 @@
         })*/
         window.location.href = "/view/upload/file?code=" + orderCode;
     }
+    $(function () {
+        /*const driver = new Driver({
+            showProgress: true,
+            steps: [
+                { element: '.top-box', popover: { title: 'Animated Tour Example', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+                // { element: 'code .line:nth-child(1)', popover: { title: 'Import the Library', description: 'It works the same in vanilla JavaScript as well as frameworks.', side: "bottom", align: 'start' }},
+                // { element: 'code .line:nth-child(2)', popover: { title: 'Importing CSS', description: 'Import the CSS which gives you the default styling for popover and overlay.', side: "bottom", align: 'start' }},
+                // { element: 'code .line:nth-child(4) span:nth-child(7)', popover: { title: 'Create Driver', description: 'Simply call the driver function to create a driver.js instance', side: "left", align: 'start' }},
+                // { element: 'code .line:nth-child(18)', popover: { title: 'Start Tour', description: 'Call the drive method to start the tour and your tour will be started.', side: "top", align: 'start' }},
+                // { element: 'a[href="/docs/configuration"]', popover: { title: 'More Configuration', description: 'Look at this page for all the configuration options you can pass.', side: "right", align: 'start' }},
+                { popover: { title: 'Happy Coding', description: 'And that is all, go ahead and start adding tours to your applications.' } }
+            ]
+        });*/
+        const driver = new Driver({
+            allowClose: false,
+            nextBtnText: '下一步',
+            prevBtnText: '上一步',
+            closeBtnText: '',
+            doneBtnText: '好了,干吧'
+        });
+        driver.defineSteps([
+            {
+                element: '.top-box',
+                popover: {
+                    title: '卓总引导着你',
+                    description: '这里是品牌',
+                }
+            },
+            {
+                element: '#orderCode',
+                popover: {
+                    title: '卓总引导着你',
+                    description: '在这里输入订单',
+                    position: 'top',
+                }
+            },
+            {
+                element: '#uploadBtnDiv',
+                popover: {
+                    title: '卓总引导着你',
+                    description: '点这里上传图片吧',
+                    position: 'bottom',
+                    // allowClose: true,
+                }
+            },
+        ]);
+        driver.start()
+    })
 </script>
 </body>
 </html>

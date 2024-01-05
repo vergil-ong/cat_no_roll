@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/upload")
@@ -88,28 +90,7 @@ public class UploadFileApiController {
                 // 文件保存
                 multipartFile.transferTo(new File(codeFile, oldName));
 
-                String resHtml = "\"<div class=\"alert alert-warning\" role=\"alert\" style=\"font-size: 14px;\">\n" +
-                        "    页面仅做展示，不是制作效果，请放心上传<br/>\n" +
-                        "    有些图片格式浏览器中可能不能预览，但不影响制作<br/>\n" +
-                        "    提交后，建议截图发给客服！\n" +
-                        "</div>\n" +
-                        "\n" +
-                        "<div class=\"row\" style=\"padding: 5px;\" >\n" +
-                        "    <div class=\"col-6 col-md-3 \" style=\" padding: 0;padding-left: 7px;margin-bottom: 15px; \">\n" +
-                        "        <div class=\"card h-100 border-info\" >\n" +
-                        "            <img src=\"/static/files/"+oldName+"\" class=\"card-img-top\">\n" +
-                        "            <div class=\"card-body\" style=\"padding:3px\">\n" +
-                        "\n" +
-                        "            </div>\n" +
-                        "            <div class=\"card-footer bg-transparent\">\n" +
-                        "                <button type=\"button\" data-id=\"38437\" class=\"upbut btn  btn-light\" onclick=\"delImg(this)\"  style=\"font-size:1.5rem;border-radius: 0.5rem;\">\n" +
-                        "                    删除\n" +
-                        "                </button>\n" +
-                        "            </div>\n" +
-                        "        </div>\n" +
-                        "    </div>\n" +
-                        "</div>\"";
-                return resHtml;
+                return oldName;
             }
         } catch (IOException e) {
             log.info("IOException {}", e.getMessage());
@@ -118,27 +99,35 @@ public class UploadFileApiController {
     }
 
     @RequestMapping("/orderImgs")
-    public String orderImgs(String code) {
+    public List<Map<String, String>> orderImgs(String code) {
         File codeFile = new File(root_path, code);
         File[] files = codeFile.listFiles();
-        List<String> pathList = new ArrayList<>();
+        List<Map<String, String>> resultList = new ArrayList<>();
 
-        String resHtml = "<div class=\"alert alert-warning\" role=\"alert\" style=\"font-size: 14px;\">\n" +
-                "    页面仅做展示，不是制作效果，请放心上传<br/>\n" +
-                "    有些图片格式浏览器中可能不能预览，但不影响制作<br/>\n" +
-                "    提交后，建议截图发给客服！\n" +
+        for (File file : files) {
+            Map<String, String> resMap = new HashMap<>();
+            String fileName = file.getName();
+            String path = "/api/upload/files/?code=" + code + "&fileName=" + fileName;
+            resMap.put("fileName", fileName);
+            resMap.put("path", path);
+            resultList.add(resMap);
+        }
+        return resultList;
+
+        /*String resHtml = "<div class=\"alert alert-warning\" role=\"alert\" style=\"font-size: 14px;\">\n" +
+                "这个位置也要留给卓总讲话 <br/>\n"+
+                "来呱唧呱唧<br/>\n"+
+                "呱唧呱唧～\n"+
                 "</div>\n" +
                 "\n" +
                 "<div class=\"row\" style=\"padding: 5px;\" >\n" +
-                "    <div class=\"col-6 col-md-3 \" style=\" padding: 0;padding-left: 7px;margin-bottom: 15px; \">\n";
+                "    <div class=\"col-6 col-md-6 \" style=\" padding: 0;padding-left: 7px;margin-bottom: 15px; \">\n";
         for (File file : files) {
             String fileName = file.getName();
             String path = "/api/upload/files/?code=" + code + "&fileName=" + fileName;
-            resHtml += "        <div class=\"card h-100 border-info\" >\n" +
+            resHtml += "        <div class=\"card \" style=\"width: 10rem\" >\n" +
                     "            <img src=\""+path+"\" class=\"card-img-top\">\n" +
-                    "            <div class=\"card-body\" style=\"padding:3px\">\n" +
-                    "\n" +
-                    "            </div>\n" +
+//                    "            <div class=\"card-body\" style=\"padding:3px\"></div>\n" +
                     "            <div class=\"card-footer bg-transparent\">\n" +
                     "                <button type=\"button\" data-id=\"38437\" class=\"upbut btn  btn-light\" onclick=\"delImg('"+fileName+"')\"  style=\"font-size:1.5rem;border-radius: 0.5rem;\">\n" +
                     "                    删除\n" +
@@ -149,6 +138,6 @@ public class UploadFileApiController {
 
         resHtml += "    </div>\n" +
                 "</div>";
-        return resHtml;
+        return resHtml;*/
     }
 }
