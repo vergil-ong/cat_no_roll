@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: cat-upload-file-web.online
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+
+

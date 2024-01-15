@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: local
+  mvc:
+    static-path-pattern: /static/**
+    view:
+      suffix: .html
+  freemarker:
+    template-loader-path: classpath:/templates/
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+
+server:
+  port: 8001
+  servlet:
+    encoding:
+      charset: utf-8
