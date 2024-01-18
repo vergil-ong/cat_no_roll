@@ -2,6 +2,7 @@
     position: fixed;
     top: 1px;
     right: 20px;
+    z-index: 9999;
 }
 
 body {
@@ -87,4 +88,8 @@ body {
 .div-btn-center {
     width: 8rem;
     margin: 0 auto;
+}
+
+.down-num-font {
+    color: white;
 }
