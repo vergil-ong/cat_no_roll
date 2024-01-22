@@ -6,7 +6,7 @@
     <title>猫不卷</title>
     <script src='/static/js/jquery.js'></script>
     <script src="/static/js/download.js"></script>
-    <link rel="stylesheet" href='/static/css/common.css'>
+    <link rel="stylesheet" href='/static/css/common.css?v=20240122'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
 
     <style>
@@ -45,7 +45,7 @@
 <body>
 <!-- 顶部logo -->
 <div class="top-logo">
-    <img src="/static/imgs/logo1.png">
+    <img src="/static/imgs/logo.jpg">
 </div>
 <div class="container">
     <div class="row">
@@ -58,8 +58,8 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-3">
+    <div class="row" id="videoRow">
+        <#--<div class="col-3">
             <div>
                 <span class="down-num-font">1</span>
             </div>
@@ -71,46 +71,7 @@
                     <input type="radio" >
                 </div>
             </div>
-        </div>
-        <div class="col-3">
-            <div>
-                <span class="down-num-font">2</span>
-            </div>
-            <div class="main" style="position:relative;">
-                <div class="img">
-                    <img alt="图片名称" src="/static/imgs/before1.png" onclick="imgClick(this)" style="width:100px;height:100px">
-                </div>
-                <div class="checkbox" style="position:absolute;top:0;left:0;z-index:1000">
-                    <input type="radio" >
-                </div>
-            </div>
-        </div>
-        <div class="col-3">
-            <div>
-                <span class="down-num-font">3</span>
-            </div>
-            <div class="main" style="position:relative;">
-                <div class="img">
-                    <img alt="图片名称" src="/static/imgs/before1.png" onclick="imgClick(this)" style="width:100px;height:100px">
-                </div>
-                <div class="checkbox" style="position:absolute;top:0;left:0;z-index:1000">
-                    <input type="radio" >
-                </div>
-            </div>
-        </div>
-        <div class="col-3">
-            <div>
-                <span class="down-num-font">4</span>
-            </div>
-            <div class="main" style="position:relative;">
-                <div class="img">
-                    <img alt="图片名称" src="/static/imgs/before1.png" onclick="imgClick(this)" style="width:100px;height:100px">
-                </div>
-                <div class="checkbox" style="position:absolute;top:0;left:0;z-index:1000">
-                    <input type="radio" >
-                </div>
-            </div>
-        </div>
+        </div>-->
     </div>
 </div>
 <div class="container" style="margin-top: 30px">
@@ -121,13 +82,18 @@
         <div class="col-6 down-btn-div">
             <button type="button" id="downNumBtn" data-num="0" class="down-btn" onclick="downloadVideo()">下载(0)</button>
         </div>
+        <div class="col-12">
+            <div class="text-center" style="margin-bottom: 20px">
+                <span class="wechat-bottom">微信号:${code}</span>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="footer">
     <div class="row footer-row">
         <div class="col-6 no-pd">
-            <button type="button" class="footer-btn">上传素材</button>
+            <button type="button" class="footer-btn" onclick="jumpUpload()">上传素材</button>
         </div>
         <div class="col-6 no-pd">
             <button type="button" class="footer-btn">下载爆款视频</button>
@@ -177,16 +143,80 @@
             return false;
         }
         $(".img>img").each(function (index, e) {
-            let radio = $(e).parent().parent().find("input[type=radio]")
+            let currentImg = $(e)
+            let radio = currentImg.parent().parent().find("input[type=radio]")
             let radioVal = radio.attr('checked')
             if (radioVal === true || radioVal === 'checked') {
-                download("/api/upload/files?code=1&fileName=1.mp4", index+'.mp4', 'application/octet-stream')
+                $.ajax({
+                    url: "/api/upload/user/down/increase?adminUploadId="+currentImg.data('admin-video-id'),
+                    type: 'post',
+                    timeout:3*1000*1000,
+                    contentType: false,
+                    processData: false,
+                    error:function (res) {
+                        console.log("user/down/increase fail", res)
+                    },
+                    success: function (res) {
+                        console.log("user/down/increase success", res)
+                    }
+                })
+
+                download(currentImg.data('video-url'), index+'.mp4', 'application/octet-stream')
+            }
+        })
+    }
+
+    function jumpUpload() {
+        location.href='/view/upload/file?wechatCode=${code}'
+    }
+
+    function refreshTable() {
+        $("#videoRow").empty()
+        $.ajax({
+            url: "/api/upload/admin/video/list?wechatCode=${code}",
+            type: 'get',
+            timeout:30*1000,
+            contentType: false,
+            processData: false,
+            error:function (res) {
+                console.log("get table fail", res)
+            },
+            success: function (res) {
+                console.log("get table success", res)
+                if (res.status !== 200) {
+                    alert(res.message)
+                    return false;
+                }
+                let videoTbHtml = ""
+                let index = 0;
+                for (let adminUploadVideoVo of res.data) {
+                    index ++
+                    let userDownloaded = adminUploadVideoVo.adminUploadVideo.userDownCount > 0
+
+                    videoTbHtml += "<div class=\"col-3\">"
+                    videoTbHtml += " <div>"
+                    videoTbHtml += "     <span class=\"down-num-font\">"+index+"</span>"
+                    videoTbHtml += " </div>"
+                    videoTbHtml += " <div class=\"main\" style=\"position:relative;\">"
+                    videoTbHtml += "  <div class=\"img\">"
+                    videoTbHtml += "   <img alt=\"图片名称\" src=\""+adminUploadVideoVo.imgUrl+"\" " +
+                        "data-video-url=\""+adminUploadVideoVo.videoUrl+"\" " +
+                        "data-admin-video-id=\""+adminUploadVideoVo.adminUploadVideo.id+"\" " +
+                        "onclick=\"imgClick(this)\" style=\"width:90px;height:100px\">"
+                    videoTbHtml += "  </div>"
+                    videoTbHtml += "  <div class=\"checkbox\" style=\"position:absolute;top:0;left:0;z-index:1000\">"
+                    videoTbHtml += "   <input type=\"radio\" >"
+                    videoTbHtml += "  </div>"
+                    videoTbHtml += " </div>"
+                    videoTbHtml += "</div>"
+                }
+                $("#videoRow").html(videoTbHtml)
             }
         })
     }
     
     $(function () {
-
+        refreshTable()
     })
 
 </script>

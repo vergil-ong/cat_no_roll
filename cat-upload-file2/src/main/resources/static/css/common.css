@@ -4,6 +4,9 @@
     right: 20px;
     z-index: 9999;
 }
+.top-logo img {
+    width: 5rem
+}
 
 body {
     background-color: var(--background-black) !important;
@@ -15,7 +18,7 @@ body {
 
 :root {
     --yellow-color: #f89a10;
-    --background-black: #555555;
+    --background-black: #000000;
 }
 
 .footer {
@@ -76,7 +79,7 @@ body {
     height: 50px;
 }
 .img-card-text {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     color: white;
 }
@@ -92,4 +95,10 @@ body {
 
 .down-num-font {
     color: white;
+}
+
+.wechat-bottom {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
 }

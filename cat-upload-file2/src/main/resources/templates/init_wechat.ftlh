@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>猫不卷</title>
     <script src='/static/js/jquery.js'></script>
-    <link rel="stylesheet" href='/static/css/common.css'>
+    <link rel="stylesheet" href='/static/css/common.css?v=20240122'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
 
     <style>
@@ -18,10 +18,10 @@
         }
         .wechat-input {
             border-radius: 15px;
-            height: 30px;
+            height: 40px;
             padding-left: 5px;
             padding-right: 5px;
-            width: 15rem;
+            width: 16rem;
         }
         .upload-btn {
             display: block;
@@ -31,14 +31,14 @@
             font-size: 28px;
             border-radius: 24px;
             height: 48px;
-            width: 15rem;
+            width: 8rem;
         }
     </style>
 </head>
 <body>
 <!-- 顶部logo -->
 <div class="top-logo">
-    <img src="/static/imgs/logo1.png">
+    <img src="/static/imgs/logo.jpg">
 </div>
 <div class="container">
     <div class="row" style="height: 100vh">
@@ -47,13 +47,16 @@
             <div class="d-flex align-items-center justify-content-center" style="height: 100%">
                 <div style="display: block">
                     <div>
-                        <span class="font-yellow font-label">请输入微信名</span>
+                        <span class="font-yellow font-label">请输入微信号</span>
                     </div>
                     <div>
                         <input type="text" class="wechat-input" id="wechatCode">
                     </div>
                     <div>
-                        <button type="button" class="upload-btn" onclick="uploadClick()">上传素材</button>
+                        <div class="btn-group">
+                            <button type="button" class="upload-btn" onclick="uploadClick()">上传素材</button>
+                            <button type="button" class="upload-btn" onclick="downloadClick()">下载素材</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,6 +77,15 @@
             return false
         }
         window.location.href = "/view/upload/file?wechatCode=" + wechatCode;
+    }
+
+    function downloadClick() {
+        let wechatCode = $("#wechatCode").val()
+        if (!wechatCode) {
+            alert('请输入微信号')
+            return false
+        }
+        window.location.href = "/view/download/file?wechatCode=" + wechatCode;
     }
 </script>
 </body>

@@ -11,6 +11,22 @@ spring:
     multipart:
       max-file-size: 1GB
       max-request-size: 1GB
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/IdeaGitProjects/cat_no_roll/database
+    username: cat
+    password: roll
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+      settings:
+        web-allow-others: true
 
 server:
   port: 8001

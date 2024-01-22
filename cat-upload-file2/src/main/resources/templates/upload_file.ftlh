@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>猫不卷</title>
     <script src='/static/js/jquery.js'></script>
-    <link rel="stylesheet" href='/static/css/common.css'>
+    <script src='/static/js/bootstrap.bundle.js'></script>
+    <link rel="stylesheet" href='/static/css/common.css?v=20240122'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
+    <link rel="stylesheet" href='/static/css/bootstrap-icons.css'>
 
     <style>
         body {
@@ -16,13 +18,35 @@
 
         .row h1 {
             color: white;
-            font-size: 26px;
-            border-bottom: 2px solid var(--yellow-color);
+            font-size: 35px;
+            border-bottom: 6px solid var(--yellow-color);
             padding-bottom: 5px;
+            margin-bottom: 0;
+        }
+        .h-subtitle {
+            color: var(--yellow-color);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .img-title {
+            color: white;
         }
         .container img {
             width: 100%;
             height: 130px;
+        }
+        .container .img-div {
+            position:absolute;
+            top:0;
+            left:0;
+            z-index:1000
+        }
+        .img-div i {
+            margin-left: 5px;
+            font-size: 15px;
+        }
+        .container .img-play {
+            opacity: 0.2;
         }
 
         .col-6 {
@@ -41,6 +65,22 @@
         .row-pt {
             margin-top: 8px;
         }
+
+        .row-pt-title {
+            margin-top: 16px;
+        }
+
+        .btn-bottom {
+            display: block;
+            margin: 30px auto 0 auto;
+            background-color: var(--yellow-color);
+            font-weight: bold;
+            font-size: 28px;
+            border-radius: 24px;
+            height: 48px;
+            width: 14rem;
+        }
+
     </style>
 </head>
 <body>
@@ -51,20 +91,26 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-center">
-                <h1 >1.改造前</h1>
+                <h1 >1.原场景</h1>
+            </div>
+            <div class="d-flex justify-content-center">
+                <span class="h-subtitle">图片2张 + 视频2个</span>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">图片参考</span>
+            </div>
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before1.png">
+                        <img src="${systemUploadInfo.beforeImg1Url}">
                     </div>
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before2.png">
+                        <img src="${systemUploadInfo.beforeImg2Url}">
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
@@ -78,21 +124,34 @@
             </div>
         </div>
         <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">图片预览</span>
+            </div>
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img class="uploadImg1" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadImg1" data-index="0" src="${userUploadInfo.beforeImg1Url?default('/static/imgs/emptyImg.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img class="uploadImg1" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadImg1" data-index="1" src="${userUploadInfo.beforeImg2Url?default('/static/imgs/emptyImg.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-12 little-pd">
                         <div class="div-btn-center">
                             <label class="upload-btn" for="uploadImg1" style="display: block;margin: 0">图片上传</label>
-                            <input type="file" id="uploadImg1" accept="image/*" multiple class="no-display" onchange="uploadImg(this)">
+                            <input type="file" id="uploadImg1" accept="image/*" multiple class="no-display" onchange="uploadImg(this, 2)">
                         </div>
                     </div>
                 </div>
@@ -101,14 +160,29 @@
     </div>
     <div class="row row-pt">
         <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">视频参考</span>
+            </div>
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before1.png">
+<#--                        <div class="main" style="position:relative;">-->
+                            <div class="img">
+                                <img src="${systemUploadInfo.beforeVideoImg1Url}"/>
+                            </div>
+                            <div class="img-div">
+                                <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo1Url}', this)" />
+                            </div>
+<#--                        </div>-->
                     </div>
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before2.png">
+                        <div class="img">
+                            <img src="${systemUploadInfo.beforeVideoImg2Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo2Url}', this)" />
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
@@ -122,94 +196,146 @@
             </div>
         </div>
         <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">视频预览</span>
+            </div>
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img class="uploadVideo1" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadVideo1" data-index="0" src="${userUploadInfo.beforeVideoImg1Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img class="uploadVideo1" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadVideo1" data-index="1" src="${userUploadInfo.beforeVideoImg2Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-12 little-pd">
                         <label class="upload-btn" for="uploadVideo1">视频上传</label>
-                        <input type="file" id="uploadVideo1" accept="video/*" multiple class="no-display" onchange="uploadVideo(this)">
+                        <input type="file" id="uploadVideo1" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 2)">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row row-pt-title">
         <div class="col-12">
             <div class="d-flex justify-content-center">
                 <h1 >2.安装</h1>
             </div>
+            <div class="d-flex justify-content-center">
+                <span class="h-subtitle">视频4个</span>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">视频参考</span>
+            </div>
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before1.png">
+                        <div class="img">
+                            <img src="${systemUploadInfo.installVideoImg1Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo1Url}', this)" />
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before2.png">
+                        <div class="img">
+                            <img src="${systemUploadInfo.installVideoImg2Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo2Url}', this)" />
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">正视图</span>
+                        <span class="img-card-text">1. 拆箱</span>
                     </div>
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">侧视图</span>
+                        <span class="img-card-text">2. 入场</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">视频预览</span>
+            </div>
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadVideo2" data-index="0" src="${userUploadInfo.installVideoImg1Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadVideo2" data-index="1" src="${userUploadInfo.installVideoImg2Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-12 little-pd">
                         <div class="div-btn-center">
-                            <label class="upload-btn" for="uploadImg1" style="display: block;margin: 0">图片上传</label>
-                            <input type="file"  accept="image/*" multiple class="no-display" onchange="uploadImg(this)">
+<#--                            <label class="upload-btn" for="uploadVideo2">视频上传</label>-->
+<#--                            <input type="file" id="uploadVideo2" accept="video/*" multiple class="no-display" onchange="uploadVideo(this)">-->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row row-pt">
+    <div class="row ">
         <div class="col-6">
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before1.png">
+                        <div class="img">
+                            <img src="${systemUploadInfo.installVideoImg3Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo3Url}', this)" />
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before2.png">
+                        <div class="img">
+                            <img src="${systemUploadInfo.installVideoImg4Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo4Url}', this)" />
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">正视视频</span>
+                        <span class="img-card-text">3. 打孔</span>
                     </div>
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">侧视视频</span>
+                        <span class="img-card-text">4. 上螺丝</span>
                     </div>
                 </div>
             </div>
@@ -219,26 +345,97 @@
                 <#--用户上传-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadVideo2" data-index="2" src="${userUploadInfo.installVideoImg3Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadVideo2" data-index="3" src="${userUploadInfo.installVideoImg4Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-12 little-pd">
-                        <label class="upload-btn" for="uploadVideo1">视频上传</label>
-                        <input type="file" accept="video/*" multiple class="no-display" onchange="uploadVideo(this)">
+                        <label class="upload-btn" for="uploadVideo2">视频上传</label>
+                        <input type="file" id="uploadVideo2" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 4)">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row row-pt-title">
         <div class="col-12">
             <div class="d-flex justify-content-center">
                 <h1 >3.展示</h1>
             </div>
+            <div class="d-flex justify-content-center">
+                <span class="h-subtitle">图片6张 + 视频6个</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-pt">
+        <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">图片参考</span>
+            </div>
+            <div class="img-card no-pd">
+                <#--demo-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <img src="${systemUploadInfo.displayImg1Url}">
+                    </div>
+                    <div class="col-6 little-pd">
+                        <img src="${systemUploadInfo.displayImg2Url}">
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">1.正视图</span>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">2.侧视图</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">图片预览</span>
+            </div>
+            <div class="img-card no-pd">
+                <#--用户上传-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadImg3" data-index="0" src="${userUploadInfo.displayImg1Url?default('/static/imgs/emptyImg.png')}" />
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadImg3" data-index="1" src="${userUploadInfo.displayImg2Url?default('/static/imgs/emptyImg.png')}" />
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-12 little-pd">
+                        <div class="div-btn-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -247,18 +444,18 @@
                 <#--demo-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before1.png">
+                        <img src="${systemUploadInfo.displayImg3Url}">
                     </div>
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before2.png">
+                        <img src="${systemUploadInfo.displayImg4Url}">
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">正视图</span>
+                        <span class="img-card-text">3.细节</span>
                     </div>
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">侧视图</span>
+                        <span class="img-card-text">4.细节</span>
                     </div>
                 </div>
             </div>
@@ -268,41 +465,178 @@
                 <#--用户上传-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadImg3" data-index="2" src="${userUploadInfo.displayImg3Url?default('/static/imgs/emptyImg.png')}" />
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadImg3" data-index="3" src="${userUploadInfo.displayImg4Url?default('/static/imgs/emptyImg.png')}" />
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-12 little-pd">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--demo-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <img src="${systemUploadInfo.displayImg5Url}">
+                    </div>
+                    <div class="col-6 little-pd">
+                        <img src="${systemUploadInfo.displayImg6Url}">
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">5.电表箱</span>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">6.镜子</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--用户上传-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadImg3" data-index="4" src="${userUploadInfo.displayImg5Url?default('/static/imgs/emptyImg.png')}" />
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadImg3" data-index="5" src="${userUploadInfo.displayImg6Url?default('/static/imgs/emptyImg.png')}" />
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-12 little-pd">
+                        <label class="upload-btn" for="uploadImg3">图片上传</label>
+                        <input type="file" id="uploadImg3" accept="image/*" multiple class="no-display" onchange="uploadImg(this, 6)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#--展示视频-->
+    <div class="row row-pt">
+        <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">视频参考</span>
+            </div>
+            <div class="img-card no-pd">
+                <#--demo-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.displayVideoImg1Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo1Url}', this)" />
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.displayVideoImg2Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo2Url}', this)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">1.正视平拍</span>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">2.侧视推拉</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">视频预览</span>
+            </div>
+            <div class="img-card no-pd">
+                <#--用户上传-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo3" data-index="0" src="${userUploadInfo.displayVideoImg1Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo3" data-index="1" src="${userUploadInfo.displayVideoImg2Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-12 little-pd">
                         <div class="div-btn-center">
-                            <label class="upload-btn" for="uploadImg1" style="display: block;margin: 0">图片上传</label>
-                            <input type="file"  accept="image/*" multiple class="no-display" onchange="uploadImg(this)">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row row-pt">
+    <div class="row">
         <div class="col-6">
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before1.png">
+                        <div class="img">
+                            <img src="${systemUploadInfo.displayVideoImg3Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo3Url}', this)" />
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img src="/static/imgs/before2.png">
+                        <div class="img">
+                            <img src="${systemUploadInfo.displayVideoImg4Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo4Url}', this)" />
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">正视视频</span>
+                        <span class="img-card-text">3.细节平拍</span>
                     </div>
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">侧视视频</span>
+                        <span class="img-card-text">4.细节竖拍</span>
                     </div>
                 </div>
             </div>
@@ -312,16 +646,291 @@
                 <#--用户上传-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadVideo3" data-index="2" src="${userUploadInfo.displayVideoImg3Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
+                        <div class="img">
+                            <img class="uploadVideo3" data-index="3" src="${userUploadInfo.displayVideoImg4Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-12 little-pd">
-                        <label class="upload-btn" for="uploadVideo1">视频上传</label>
-                        <input type="file" accept="video/*" multiple class="no-display" onchange="uploadVideo(this)">
+                        <div class="div-btn-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--demo-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.displayVideoImg5Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo5Url}', this)" />
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.displayVideoImg6Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo6Url}', this)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">5.电箱拉合</span>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">6.镜子开合</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--用户上传-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo3" data-index="4" src="${userUploadInfo.displayVideoImg5Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo3" data-index="5" src="${userUploadInfo.displayVideoImg6Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-12 little-pd">
+                        <div class="div-btn-center">
+                            <label class="upload-btn" for="uploadVideo3">视频上传</label>
+                            <input type="file" id="uploadVideo3" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 6)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-pt-title">
+        <div class="col-12">
+            <div class="d-flex justify-content-center">
+                <h1 >4.布置</h1>
+            </div>
+            <div class="d-flex justify-content-center">
+                <span class="h-subtitle">[固定镜头，轮流换摆件] 视频6个</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-pt">
+        <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">视频参考</span>
+            </div>
+            <div class="img-card no-pd">
+                <#--demo-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.disposeVideoImg1Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo1Url}', this)" />
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.disposeVideoImg2Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo2Url}', this)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">全景</span>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">特写1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="text-center">
+                <span class="img-title">视频预览</span>
+            </div>
+            <div class="img-card no-pd">
+                <#--用户上传-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo4" data-index="0" src="${userUploadInfo.disposeVideoImg1Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo4" data-index="1" src="${userUploadInfo.disposeVideoImg2Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-12 little-pd">
+                        <div class="div-btn-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--demo-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.disposeVideoImg3Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo3Url}', this)" />
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.disposeVideoImg4Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo4Url}', this)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">特写2</span>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">特写3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--用户上传-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo4" data-index="2" src="${userUploadInfo.disposeVideoImg3Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo4" data-index="3" src="${userUploadInfo.disposeVideoImg4Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-12 little-pd">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--demo-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.disposeVideoImg5Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo5Url}', this)" />
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.disposeVideoImg6Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo6Url}', this)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">特写4</span>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">特写5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--用户上传-->
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo4" data-index="4" src="${userUploadInfo.disposeVideoImg5Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img class="uploadVideo4" data-index="5" src="${userUploadInfo.disposeVideoImg6Url?default('/static/imgs/emptyVideo.png')}">
+                        </div>
+                        <div class="img-div">
+                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row img-card-inner-text">
+                    <div class="col-12 little-pd">
+                        <label class="upload-btn" for="uploadVideo4">视频上传</label>
+                        <input type="file" id="uploadVideo4" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 6)">
                     </div>
                 </div>
             </div>
@@ -329,94 +938,11 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-center">
-                <h1 >4.布置</h1>
-            </div>
+            <button type="button" class="btn-bottom">通知PR同学</button>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <img src="/static/imgs/before1.png">
-                    </div>
-                    <div class="col-6 little-pd">
-                        <img src="/static/imgs/before2.png">
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">正视图</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">侧视图</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
-                    </div>
-                    <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                        <div class="div-btn-center">
-                            <label class="upload-btn" for="uploadImg1" style="display: block;margin: 0">图片上传</label>
-                            <input type="file"  accept="image/*" multiple class="no-display" onchange="uploadImg(this)">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row row-pt">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <img src="/static/imgs/before1.png">
-                    </div>
-                    <div class="col-6 little-pd">
-                        <img src="/static/imgs/before2.png">
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">正视视频</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">侧视视频</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
-                    </div>
-                    <div class="col-6 little-pd">
-                        <img class="" src="/static/imgs/empty1.png">
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                        <label class="upload-btn" for="uploadVideo1">视频上传</label>
-                        <input type="file" accept="video/*" multiple class="no-display" onchange="uploadVideo(this)">
-                    </div>
-                </div>
+        <div class="col-12">
+            <div class="text-center" style="margin-bottom: 20px">
+                <span class="wechat-bottom">微信号:${code}</span>
             </div>
         </div>
     </div>
@@ -428,7 +954,7 @@
             <button type="button" class="footer-btn">上传素材</button>
         </div>
         <div class="col-6 no-pd">
-            <button type="button" class="footer-btn">下载爆款视频</button>
+            <button type="button" class="footer-btn" onclick="jumpDownload()">下载爆款视频</button>
         </div>
     </div>
 </div>
@@ -438,19 +964,33 @@
     <canvas id="videoCanvas" width="320" height="200" style="display:none"></canvas>
 </div>
 
+<div class="modal fade bd-example-modal-lg" id="videoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <video controls id="modalVideo" width="300" playsinline="true"></video>
+            </div>
+            <#--<div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>-->
+        </div>
+    </div>
+</div>
+
 <script>
     $(function () {
 
     })
 
-    function uploadImg(inputFile) {
+    function uploadImg(inputFile, limit) {
         let fileId = $(inputFile).attr("id")
         var files = $(inputFile)[0].files;
         if (files.length === 0) {
             return;
         }
-        if (files.length > 2) {
-            alert('一次性最多上传2张照片')
+        if (files.length > limit) {
+            alert('一次性最多上传'+limit+'张照片')
+            return;
         }
         uploadFile(files, fileId, 0)
     }
@@ -464,7 +1004,7 @@
             var formData = new FormData();
             formData.append("file", files[index]);
             $.ajax({
-                url: "/api/upload/upload?code=${code}",
+                url: "/api/upload/img/upload?fileId="+fileId+"&fileIndex="+index+"&wechatCode=${code}",
                 type: 'post',
                 data: formData,
                 timeout:3*1000*1000,
@@ -489,14 +1029,15 @@
         }
     }
 
-    function uploadVideo(inputFile) {
+    function uploadVideo(inputFile, limit) {
         let fileId = $(inputFile).attr("id")
         var files = $(inputFile)[0].files;
         if (files.length === 0) {
             return;
         }
-        if (files.length > 2) {
-            alert('一次性最多上传2个视频')
+        if (files.length > limit) {
+            alert('一次性最多上传'+limit+'个视频')
+            return;
         }
         uploadVideoFile(files, fileId, 0)
     }
@@ -510,7 +1051,7 @@
             var formData = new FormData();
             formData.append("file", files[index]);
             $.ajax({
-                url: "/api/upload/upload?code=${code}",
+                url: "/api/upload/video/upload?fileId="+fileId+"&fileIndex="+index+"&wechatCode=${code}",
                 type: 'post',
                 data: formData,
                 timeout:3*1000*1000,
@@ -521,15 +1062,10 @@
                     uploadVideoFile(files, fileId, index)
                 },
                 success: function (res) {
-                    // $("."+fileId+":eq("+index+")").attr("src", res)
                     console.log('success res ', res)
+                    $("."+fileId+":eq("+index+")").attr("src", res.imageUrl)
                     index += 1
-
-                    cutImage(res,
-                        $("."+fileId+":eq("+(index-1)+")"),
-                        files,
-                        fileId,
-                        index)
+                    uploadVideoFile(files, fileId, index)
                 }
             })
         } catch (e) {
@@ -558,6 +1094,37 @@
             $("#fileVideo").attr("src", "")
             uploadVideoFile(files, fileId, index)
         }
+    }
+
+    function showVideoModal(videoUrl, btn) {
+        $("#modalVideo").attr('src', videoUrl)
+        $("#videoModal").modal('show')
+    }
+
+    function delImg(iconEle, imgType) {
+        let img = $(iconEle).parent().parent().find(".img>img")
+        let fileId = img.attr('class')
+        let fileIndex = img.data('index')
+        let emptyImgPath = '/static/imgs/emptyImg.png'
+        if (imgType === 2) {
+            emptyImgPath = '/static/imgs/emptyVideo.png'
+        }
+        if (img.attr('src') === emptyImgPath) {
+            return;
+        }
+        $.ajax({
+            url: "/api/upload/img/delte?fileId="+fileId+"&fileIndex="+fileIndex+"&wechatCode=${code}",
+            type: 'get',
+            error:function (res) {
+            },
+            success: function (res) {
+                img.attr('src', emptyImgPath)
+            }
+        })
+    }
+
+    function jumpDownload() {
+        location.href='/view/download/file?wechatCode=${code}'
     }
 </script>
 </body>
