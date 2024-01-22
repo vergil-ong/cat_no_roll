@@ -25,7 +25,7 @@
         }
         .down-num-font-hit{
             color: var(--yellow-color);
-            font-size: 1.5rem;
+            /*font-size: 1.5rem;*/
         }
         .img-hit {
             border: 2px solid var(--yellow-color);
@@ -96,7 +96,7 @@
             <button type="button" class="footer-btn" onclick="jumpUpload()">上传素材</button>
         </div>
         <div class="col-6 no-pd">
-            <button type="button" class="footer-btn">下载爆款视频</button>
+            <button type="button" class="footer-btn">下载视频</button>
         </div>
     </div>
 </div>
@@ -112,12 +112,12 @@
         let radioVal = radio.attr('checked')
         if (radioVal === true || radioVal === 'checked') {
             radio.removeAttr('checked')
-            spanNum.removeClass('down-num-font-hit')
+            // spanNum.removeClass('down-num-font-hit')
             $(img).removeClass('img-hit')
             downNum--
         } else {
             radio.attr('checked', 'checked')
-            spanNum.addClass('down-num-font-hit')
+            // spanNum.addClass('down-num-font-hit')
             $(img).addClass('img-hit')
             downNum++
         }
@@ -195,7 +195,12 @@
 
                     videoTbHtml += "<div class=\"col-3\">"
                     videoTbHtml += " <div>"
-                    videoTbHtml += "     <span class=\"down-num-font\">"+index+"</span>"
+                    if (userDownloaded) {
+                        videoTbHtml += "     <span class=\"down-num-font down-num-font-hit\">"+index+"</span>"
+                    } else {
+                        videoTbHtml += "     <span class=\"down-num-font\">"+index+"</span>"
+                    }
+
                     videoTbHtml += " </div>"
                     videoTbHtml += " <div class=\"main\" style=\"position:relative;\">"
                     videoTbHtml += "  <div class=\"img\">"

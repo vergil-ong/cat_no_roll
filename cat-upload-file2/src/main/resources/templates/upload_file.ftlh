@@ -6,13 +6,13 @@
     <title>猫不卷</title>
     <script src='/static/js/jquery.js'></script>
     <script src='/static/js/bootstrap.bundle.js'></script>
-    <link rel="stylesheet" href='/static/css/common.css?v=20240122'>
+    <link rel="stylesheet" href='/static/css/common.css?v=202401221627'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
     <link rel="stylesheet" href='/static/css/bootstrap-icons.css'>
 
     <style>
         body {
-            padding-bottom: 45px;
+            padding-bottom: 80px;
             height:100%
         }
 
@@ -20,7 +20,7 @@
             color: white;
             font-size: 35px;
             border-bottom: 6px solid var(--yellow-color);
-            padding-bottom: 5px;
+            padding-bottom: 0;
             margin-bottom: 0;
         }
         .h-subtitle {
@@ -46,7 +46,7 @@
             font-size: 15px;
         }
         .container .img-play {
-            opacity: 0.2;
+            opacity: 0.5;
         }
 
         .col-6 {
@@ -67,7 +67,7 @@
         }
 
         .row-pt-title {
-            margin-top: 16px;
+            margin-top: 64px;
         }
 
         .btn-bottom {
@@ -79,6 +79,10 @@
             border-radius: 24px;
             height: 48px;
             width: 14rem;
+        }
+
+        .subtitle-h {
+            height: 20px;
         }
 
     </style>
@@ -93,16 +97,16 @@
             <div class="d-flex justify-content-center">
                 <h1 >1.原场景</h1>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center subtitle-h">
                 <span class="h-subtitle">图片2张 + 视频2个</span>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">图片参考</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
@@ -124,9 +128,9 @@
             </div>
         </div>
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">图片预览</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
@@ -160,9 +164,9 @@
     </div>
     <div class="row row-pt">
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">视频参考</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
@@ -172,7 +176,7 @@
                                 <img src="${systemUploadInfo.beforeVideoImg1Url}"/>
                             </div>
                             <div class="img-div">
-                                <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo1Url}', this)" />
+                                <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo1Url}', this)" />
                             </div>
 <#--                        </div>-->
                     </div>
@@ -181,7 +185,7 @@
                             <img src="${systemUploadInfo.beforeVideoImg2Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo2Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo2Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -196,9 +200,9 @@
             </div>
         </div>
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">视频预览</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
@@ -233,16 +237,16 @@
             <div class="d-flex justify-content-center">
                 <h1 >2.安装</h1>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center subtitle-h">
                 <span class="h-subtitle">视频4个</span>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">视频参考</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
@@ -251,7 +255,7 @@
                             <img src="${systemUploadInfo.installVideoImg1Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo1Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo1Url}', this)" />
                         </div>
                     </div>
                     <div class="col-6 little-pd">
@@ -259,7 +263,7 @@
                             <img src="${systemUploadInfo.installVideoImg2Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo2Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo2Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -274,9 +278,9 @@
             </div>
         </div>
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">视频预览</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
@@ -318,7 +322,7 @@
                             <img src="${systemUploadInfo.installVideoImg3Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo3Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo3Url}', this)" />
                         </div>
                     </div>
                     <div class="col-6 little-pd">
@@ -326,7 +330,7 @@
                             <img src="${systemUploadInfo.installVideoImg4Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo4Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo4Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -375,16 +379,16 @@
             <div class="d-flex justify-content-center">
                 <h1 >3.展示</h1>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center subtitle-h">
                 <span class="h-subtitle">图片6张 + 视频6个</span>
             </div>
         </div>
     </div>
     <div class="row row-pt">
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">图片参考</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
@@ -406,9 +410,9 @@
             </div>
         </div>
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">图片预览</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
@@ -543,9 +547,9 @@
     <#--展示视频-->
     <div class="row row-pt">
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">视频参考</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
@@ -554,7 +558,7 @@
                             <img src="${systemUploadInfo.displayVideoImg1Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo1Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo1Url}', this)" />
                         </div>
                     </div>
                     <div class="col-6 little-pd">
@@ -562,7 +566,7 @@
                             <img src="${systemUploadInfo.displayVideoImg2Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo2Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo2Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -577,9 +581,9 @@
             </div>
         </div>
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">视频预览</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
@@ -619,7 +623,7 @@
                             <img src="${systemUploadInfo.displayVideoImg3Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo3Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo3Url}', this)" />
                         </div>
                     </div>
                     <div class="col-6 little-pd">
@@ -627,7 +631,7 @@
                             <img src="${systemUploadInfo.displayVideoImg4Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo4Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo4Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -681,7 +685,7 @@
                             <img src="${systemUploadInfo.displayVideoImg5Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo5Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo5Url}', this)" />
                         </div>
                     </div>
                     <div class="col-6 little-pd">
@@ -689,7 +693,7 @@
                             <img src="${systemUploadInfo.displayVideoImg6Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo6Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo6Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -741,16 +745,16 @@
             <div class="d-flex justify-content-center">
                 <h1 >4.布置</h1>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center subtitle-h">
                 <span class="h-subtitle">[固定镜头，轮流换摆件] 视频6个</span>
             </div>
         </div>
     </div>
     <div class="row row-pt">
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">视频参考</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--demo-->
                 <div class="row img-card-inner">
@@ -759,7 +763,7 @@
                             <img src="${systemUploadInfo.disposeVideoImg1Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo1Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo1Url}', this)" />
                         </div>
                     </div>
                     <div class="col-6 little-pd">
@@ -767,7 +771,7 @@
                             <img src="${systemUploadInfo.disposeVideoImg2Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo2Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo2Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -782,9 +786,9 @@
             </div>
         </div>
         <div class="col-6">
-            <div class="text-center">
+            <#--<div class="text-center">
                 <span class="img-title">视频预览</span>
-            </div>
+            </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
@@ -824,7 +828,7 @@
                             <img src="${systemUploadInfo.disposeVideoImg3Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo3Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo3Url}', this)" />
                         </div>
                     </div>
                     <div class="col-6 little-pd">
@@ -832,7 +836,7 @@
                             <img src="${systemUploadInfo.disposeVideoImg4Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo4Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo4Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -884,7 +888,7 @@
                             <img src="${systemUploadInfo.disposeVideoImg5Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo5Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo5Url}', this)" />
                         </div>
                     </div>
                     <div class="col-6 little-pd">
@@ -892,7 +896,7 @@
                             <img src="${systemUploadInfo.disposeVideoImg6Url}"/>
                         </div>
                         <div class="img-div">
-                            <img src="/static/imgs/play.jpeg" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo6Url}', this)" />
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo6Url}', this)" />
                         </div>
                     </div>
                 </div>
@@ -936,13 +940,13 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <button type="button" class="btn-bottom">通知PR同学</button>
-        </div>
+    <div class="row" style="margin-top: 50px">
+<#--        <div class="col-12">-->
+<#--            <button type="button" class="btn-bottom">通知PR同学</button>-->
+<#--        </div>-->
         <div class="col-12">
             <div class="text-center" style="margin-bottom: 20px">
-                <span class="wechat-bottom">微信号:${code}</span>
+                <span class="wechat-bottom">猫不卷微信号:mbj6699</span>
             </div>
         </div>
     </div>
@@ -954,7 +958,7 @@
             <button type="button" class="footer-btn">上传素材</button>
         </div>
         <div class="col-6 no-pd">
-            <button type="button" class="footer-btn" onclick="jumpDownload()">下载爆款视频</button>
+            <button type="button" class="footer-btn" onclick="jumpDownload()">下载视频</button>
         </div>
     </div>
 </div>

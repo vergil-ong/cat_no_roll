@@ -28,10 +28,10 @@
             margin: 30px auto 0 auto;
             background-color: var(--yellow-color);
             font-weight: bold;
-            font-size: 28px;
+            font-size: 17px;
             border-radius: 24px;
             height: 48px;
-            width: 8rem;
+            width: 7.5rem;
         }
     </style>
 </head>
@@ -54,8 +54,8 @@
                     </div>
                     <div>
                         <div class="btn-group">
-                            <button type="button" class="upload-btn" onclick="uploadClick()">上传素材</button>
-                            <button type="button" class="upload-btn" onclick="downloadClick()">下载素材</button>
+                            <button type="button" style="margin-left: 5px" class="upload-btn" onclick="uploadClick()">上传素材</button>
+                            <button type="button" style="margin-left: 10px" class="upload-btn" onclick="downloadClick()">下载视频</button>
                         </div>
                     </div>
                 </div>
