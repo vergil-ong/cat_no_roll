@@ -7,7 +7,7 @@
 export https_proxy=http://127.0.0.1:7890
 
 ### 启动
-java -jar -Dspring.profiles.active=online
+nohup java -jar -Dspring.profiles.active=online cat-upload-file2-1.0-SNAPSHOT.jar > /dev/null 2>&1 &
 
 ### 截图
 x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast
