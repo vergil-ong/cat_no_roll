@@ -46,33 +46,7 @@
             </rollingPolicy>
         </appender>
         <springProperty scope="context" name="appName" source="spring.application.name"/>
-        <appender name="json" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${log.dir}/json.log</file>
-            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-                <customFields>
-                    {
-                    "cluster_name": "${CLUSTER_NAME}",
-                    "my_pod_namespace": "${MY_POD_NAMESPACE}",
-                    "my_pod_name": "${MY_POD_NAME}",
-                    "my_node_name": "${MY_NODE_NAME}",
-                    "my_pod_ip": "${MY_POD_IP}"
-                    }
-                </customFields>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <FileNamePattern>${log.dir}/json.%d{yyyy-MM-dd}.log</FileNamePattern>
-                <MaxHistory>7</MaxHistory>
-            </rollingPolicy>
-        </appender>
-        <logger name="RocketmqCommon" level="ERROR" additivity="false">
-            <appender-ref ref="FILE_ERROR"/>
-        </logger>
-        <logger name="RocketmqRemoting" level="ERROR" additivity="false">
-            <appender-ref ref="FILE_ERROR"/>
-        </logger>
-        <logger name="RocketmqClient" level="ERROR" additivity="false">
-            <appender-ref ref="FILE_ERROR"/>
-        </logger>
+
         <root level="INFO">
             <if condition='isDefined("MY_POD_NAME")'>
                 <then>

@@ -84,7 +84,7 @@
         </div>
         <div class="col-12">
             <div class="text-center" style="margin-bottom: 20px">
-                <span class="wechat-bottom">微信号:${code}</span>
+                <span class="wechat-bottom">猫不卷微信号:mbj6699</span>
             </div>
         </div>
     </div>

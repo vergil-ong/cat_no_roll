@@ -8,6 +8,7 @@ import com.github.ong.model.h2.UserUploadInfo;
 import com.github.ong.service.AdminUploadVideoService;
 import com.github.ong.service.FileAddrService;
 import com.github.ong.service.UserUploadInfoService;
+import com.github.ong.utils.AliyunUtil;
 import com.github.ong.utils.StringUtil;
 import com.github.ong.utils.VideoFrameUtil;
 import com.github.ong.vo.AdminUploadVideoVo;
@@ -18,6 +19,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.id.UUIDGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
@@ -27,10 +29,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
@@ -44,7 +48,8 @@ import java.util.Optional;
 @Slf4j
 public class UploadFileApiController {
 
-    public static final String root_path = "/Users/wangshuo/IdeaGitProjects/cat_no_roll/files";
+//    public static final String root_path = "/Users/wangshuo/IdeaGitProjects/cat_no_roll/files";
+
 
     @Resource
     private FileAddrService fileAddrService;
@@ -55,24 +60,25 @@ public class UploadFileApiController {
     @Resource
     private AdminUploadVideoService adminUploadVideoService;
 
+    @Resource(name = "outRestTemplate")
+    private RestTemplate outRestTemplate;
+
     @RequestMapping("/img/upload")
     public String uploadImage(String wechatCode,
                                 String fileId,
                                 String fileIndex,
-                                MultipartHttpServletRequest request) {
-        FileBo newFileBo = saveFile(wechatCode, request);
-        if (Objects.isNull(newFileBo)) {
-            return null;
-        }
-        FileAddr imageFileAddr = fileAddrService.saveLocalImg(newFileBo.getUrl());
+                                String fileUrl,
+                                String fileName) {
+        FileAddr imageFileAddr = fileAddrService.saveSsoImg(fileUrl, fileName);
         if (Objects.isNull(imageFileAddr)) {
-            return newFileBo.getUrl();
+            log.info("user img upload 保存视频文件关联关系失败 {},{}", fileId, fileIndex);
+            return AliyunUtil.SSO_ROOT + fileUrl;
         }
 
         UserUploadInfo userUploadInfo = new UserUploadInfo();
         UploadFileIndex uploadFileIndex = UploadFileIndex.getFileIndex(fileId, fileIndex);
         if (Objects.isNull(uploadFileIndex)){
-            return newFileBo.getUrl();
+            return AliyunUtil.SSO_ROOT + fileUrl;
         }
         switch (uploadFileIndex){
             case BEFORE_IMG_1:
@@ -104,34 +110,30 @@ public class UploadFileApiController {
         }
         userUploadInfoService.updateUserUploadInfo(userUploadInfo, wechatCode);
 
-        return newFileBo.getUrl();
+        return AliyunUtil.SSO_ROOT + fileUrl;
     }
 
     @RequestMapping("/video/upload")
     public FileUploadVo uploadVideo(String wechatCode,
                                     String fileId,
                                     String fileIndex,
-                                    MultipartHttpServletRequest request) {
-        FileBo newFileBo = saveFile(wechatCode, request);
-        if (Objects.isNull(newFileBo)) {
+                                    String fileUrl,
+                                    String fileName) {
+        FileAddr videoFileAddr = fileAddrService.saveSsoVideo(fileUrl, fileName);
+        if (Objects.isNull(videoFileAddr)) {
+            log.info("uploadVideo 保存视频文件关联关系失败 {},{}", fileId, fileIndex);
             return null;
         }
-        FileUploadVo fileUploadVo = new FileUploadVo();
-        fileUploadVo.setVideoUrl(newFileBo.getUrl());
-        fileUploadVo.setImageUrl(newFileBo.getFrameUrl());
-
-        FileAddr videoFileAddr = fileAddrService.saveLocalVideo(newFileBo.getUrl());
-        if (Objects.isNull(videoFileAddr)) {
-            return fileUploadVo;
-        }
-        FileAddr imageFileAddr = null;
-        boolean frameBol = VideoFrameUtil.getFrame(newFileBo.getFramePath(), newFileBo.getPath());
-        if (frameBol) {
-            imageFileAddr = fileAddrService.saveLocalImg(newFileBo.getFrameUrl());
-        }
+        FileAddr imageFileAddr = fileAddrService.saveVideoFrame(fileUrl, wechatCode);
         if (Objects.isNull(imageFileAddr)) {
-            return fileUploadVo;
+            log.info("uploadVideo 保存视频截图失败 {},{}", fileId, fileIndex);
+            return null;
         }
+
+        FileUploadVo fileUploadVo = new FileUploadVo();
+        fileUploadVo.setVideoUrl(userUploadInfoService.getAddr(videoFileAddr));
+        fileUploadVo.setImageUrl(userUploadInfoService.getAddr(imageFileAddr));
+
         UserUploadInfo userUploadInfo = new UserUploadInfo();
         UploadFileIndex uploadFileIndex = UploadFileIndex.getFileIndex(fileId, fileIndex);
         if (Objects.isNull(uploadFileIndex)){
@@ -228,7 +230,7 @@ public class UploadFileApiController {
                 String newFileName = StringUtil.uuid();
                 String newFileWholeName = StringUtil.uuid() +"."+ extension;
                 String newFrameWholeName = newFileName+".jpg";
-                File codeFile = new File(root_path, code);
+                File codeFile = new File(userUploadInfoService.getRootPath(), code);
                 if (!codeFile.exists()) {
                     codeFile.mkdirs();
                 }
@@ -289,6 +291,34 @@ public class UploadFileApiController {
         return ResultVo.success();
     }
 
+    @RequestMapping("/admin/sso/video")
+    public ResultVo uploadAdminVideo(String wechatCode,
+                                     String fileUrl,
+                                     String fileName){
+        ResultVo resultVo = ResultVo.fail();
+        FileAddr videoFileAddr = fileAddrService.saveSsoVideo(fileUrl, fileName);
+        if (Objects.isNull(videoFileAddr)) {
+            resultVo.setMessage("保存视频文件关联关系失败");
+            return resultVo;
+        }
+        FileAddr imageFileAddr = fileAddrService.saveVideoFrame(fileUrl, wechatCode);
+        if (Objects.isNull(imageFileAddr)) {
+            resultVo.setMessage("保存视频截图失败");
+            return resultVo;
+        }
+
+        AdminUploadVideo adminUploadVideo = new AdminUploadVideo();
+        adminUploadVideo.setWechatCode(wechatCode);
+        adminUploadVideo.setVideoId(videoFileAddr.getId());
+        adminUploadVideo.setVideoImgId(imageFileAddr.getId());
+        adminUploadVideo.setUpdateTime(new Date());
+        adminUploadVideo.setUserDownCount(0);
+
+        adminUploadVideoService.recordVideo(adminUploadVideo);
+
+        return ResultVo.success();
+    }
+
     @RequestMapping("/img/delte")
     public void delImage(String wechatCode,
                         String fileId,
@@ -301,29 +331,33 @@ public class UploadFileApiController {
         userUploadInfoService.deleteImage(uploadFileIndex, wechatCode);
     }
 
-    public static File getFile(String code, String fileName) {
-        return new File(new File(root_path, code), fileName);
-    }
 
     @RequestMapping(value = "/files", method = RequestMethod.GET)
     public void cacheDownload(@RequestParam("fileName") String fileName,
                               @RequestParam("code") String code,
                               HttpServletResponse response) throws Exception {
-        File imageFile = getFile(code, fileName);
+        File imageFile = userUploadInfoService.getFile(code, fileName);
         FileSystemResource file = new FileSystemResource(imageFile);
         if (!file.exists()) {
             return;
         }
         String filename = file.getFilename();
-        InputStream inputStream = null;
+        InputStream inputStream = new FileInputStream(imageFile);
         BufferedInputStream bufferedInputStream = null;
         BufferedOutputStream bufferedOutputStream = null;
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
         try {
-            inputStream = file.getInputStream();
-            bufferedInputStream = new BufferedInputStream(inputStream);
-            bufferedOutputStream = new BufferedOutputStream(response.getOutputStream());
-            FileCopyUtils.copy(bufferedInputStream, bufferedOutputStream);
+//            inputStream = file.getInputStream();
+//            bufferedInputStream = new BufferedInputStream(inputStream);
+//            bufferedOutputStream = new BufferedOutputStream(response.getOutputStream());
+//            FileCopyUtils.copy(bufferedInputStream, bufferedOutputStream);
+            ServletOutputStream outputStream = response.getOutputStream();
+            byte[] b = new byte[1024 * 64];
+            int len;
+            //从输入流中读取一定数量的字节，并将其存储在缓冲区字节数组中，读到末尾返回-1
+            while ((len = inputStream.read(b)) > 0) {
+                outputStream.write(b, 0, len);
+            }
         }catch(Exception e){
 
         }finally {

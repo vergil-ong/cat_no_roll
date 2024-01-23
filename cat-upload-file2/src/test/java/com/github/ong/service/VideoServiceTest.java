@@ -10,8 +10,9 @@ public class VideoServiceTest {
 
     @Test
     public void testGetFirstFrame() {
-        String imagePath = UploadFileApiController.root_path + "/ADMIN_CAT_NO_ROLL/install4_img.jpg";
-        String videoPath = UploadFileApiController.root_path + "/ADMIN_CAT_NO_ROLL/install4.mp4";
+        String rootPath = "/Users/wangshuo/IdeaGitProjects/cat_no_roll/files";
+        String imagePath = rootPath + "/ADMIN_CAT_NO_ROLL/install4_img.jpg";
+        String videoPath = rootPath + "/ADMIN_CAT_NO_ROLL/install4.mp4";
         boolean getFrameRes = VideoFrameUtil.getFrame(imagePath, videoPath);
         log.info("getFrameRes is {}", getFrameRes);
     }

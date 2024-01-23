@@ -5,6 +5,8 @@ spring:
     cache: false
     settings:
       template_update_delay: 0
+file:
+  root-path: /Users/wangshuo/IdeaGitProjects/cat_no_roll/files
 #  datasource:
 #    url: jdbc:h2:mem:testdb
 #    driver-class-name: org.h2.Driver

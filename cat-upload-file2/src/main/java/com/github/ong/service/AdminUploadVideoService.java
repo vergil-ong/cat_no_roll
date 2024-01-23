@@ -8,6 +8,7 @@ import com.github.ong.enums.db.FileType;
 import com.github.ong.enums.db.WholeAddr;
 import com.github.ong.model.h2.AdminUploadVideo;
 import com.github.ong.model.h2.FileAddr;
+import com.github.ong.utils.AliyunUtil;
 import com.github.ong.vo.AdminUploadVideoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -32,6 +33,9 @@ public class AdminUploadVideoService {
 
     @Resource
     private FileAddrDao fileAddrDao;
+
+    @Resource
+    private UserUploadInfoService userUploadInfoService;
 
     public void recordVideo(AdminUploadVideo adminUploadVideo) {
         adminUploadVideoDao.save(adminUploadVideo);
@@ -67,13 +71,23 @@ public class AdminUploadVideoService {
             adminUploadVideoVo.setAdminUploadVideo(adminUploadVideo);
             FileAddr videoFileAddr = fileAddrMap.get(adminUploadVideo.getVideoId());
             if (Objects.nonNull(videoFileAddr)) {
-                adminUploadVideoVo.setVideoUrl(videoFileAddr.getAddr());
+                if (WholeAddr.SSO.getCode().equals(videoFileAddr.getWholeAddr())) {
+                    adminUploadVideoVo.setVideoUrl(AliyunUtil.SSO_ROOT + videoFileAddr.getAddr());
+                } else {
+                    adminUploadVideoVo.setVideoUrl(videoFileAddr.getAddr());
+                }
+
                 adminUploadVideoVo.setVideoFileName(videoFileAddr.getOriginalFileName());
             }
 
             FileAddr imgFileAddr = fileAddrMap.get(adminUploadVideo.getVideoImgId());
             if (Objects.nonNull(imgFileAddr)) {
-                adminUploadVideoVo.setImgUrl(imgFileAddr.getAddr());
+                if (WholeAddr.SSO.getCode().equals(imgFileAddr.getWholeAddr())) {
+                    adminUploadVideoVo.setImgUrl(AliyunUtil.SSO_ROOT + imgFileAddr.getAddr());
+                } else {
+                    adminUploadVideoVo.setImgUrl(imgFileAddr.getAddr());
+                }
+
             }
             adminUploadVideoVoList.add(adminUploadVideoVo);
         }
@@ -104,7 +118,7 @@ public class AdminUploadVideoService {
                 if (CollectionUtils.isEmpty(fileNameList)) {
                     continue;
                 }
-                File file = UploadFileApiController.getFile(codeList.get(0), fileNameList.get(0));
+                File file = userUploadInfoService.getFile(codeList.get(0), fileNameList.get(0));
                 if (file.exists()) {
                     file.delete();
                 }

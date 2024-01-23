@@ -7,7 +7,10 @@
     <script src='/static/js/jquery.js'></script>
     <script src='/static/js/fakeLoader.min.js'></script>
     <script src='/static/js/bootstrap.bundle.js'></script>
+    <script src="/static/js/common.js?v=202401231214"></script>
     <script src="/static/js/download.js"></script>
+    <script src="/static/js/aliyun-oss-sdk-6.18.1.min.js"></script>
+
     <link rel="stylesheet" href='/static/css/common.css?v=20240122'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
     <link rel="stylesheet" href='/static/css/fakeLoader.min.css'>
@@ -63,9 +66,47 @@
 <div class="fakeLoader"></div>
 
 <script>
+    var client
     $(function () {
         $(".fakeLoader").hide()
+        $.get('/api/sts/info', function(data, status) {
+            client = new OSS({
+                // yourRegion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
+                region: 'oss-cn-hangzhou',
+                // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
+                accessKeyId: data.accessKeyId,
+                accessKeySecret: data.accessKeySecret,
+                // 从STS服务获取的安全令牌（SecurityToken）。
+                stsToken: data.stsToken,
+                refreshSTSToken: async () => {
+                    // 向您搭建的STS服务获取临时访问凭证。
+                    const info = await fetch('/api/sts/info');
+                    return {
+                        accessKeyId: info.accessKeyId,
+                        accessKeySecret: info.accessKeySecret,
+                        stsToken: info.stsToken
+                    }
+                },
+                // 刷新临时访问凭证的时间间隔，单位为毫秒。
+                refreshSTSTokenInterval: 300000,
+                // 填写Bucket名称。
+                bucket: 'cat-no-roll'
+            });
+        })
     })
+
+    async function put(file, wechatCode, fileName) {
+        try {
+            // object表示上传到OSS的文件名称。
+            // file表示浏览器中需要上传的文件，支持HTML5 file和Blob类型。
+            const r1 = await client.put(wechatCode + "/" + fileName, file);
+            console.log('put success: %j', r1);
+            // const r2 = await client.get(fileName);
+            // console.log('get success: %j', r2);
+        } catch (e) {
+            console.error('error: %j', e);
+        }
+    }
 
     function checkWechatCode() {
         let wechatCode = $("#wechatCode").val()
@@ -85,11 +126,19 @@
         if (files.length === 0) {
             return;
         }
+        let wechatCode = $("#wechatCode").val()
         loading()
+        let fileName = files[0].name;
+        let fileExt = fileName.substring(fileName.lastIndexOf("."));
+        let newFileName = uuidC() + fileExt
+        put(files[0], wechatCode, newFileName)
+        let newFileKey = wechatCode + "/" + newFileName
+
         var formData = new FormData();
-        formData.append("file", files[0]);
+        formData.append("fileUrl", newFileKey);
+        formData.append("fileName", newFileName);
         $.ajax({
-            url: "/api/upload/admin/video?wechatCode="+$("#wechatCode").val(),
+            url: "/api/upload/admin/sso/video?wechatCode="+wechatCode,
             type: 'post',
             data: formData,
             timeout:3*1000*1000,

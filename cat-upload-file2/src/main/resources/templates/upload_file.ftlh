@@ -6,6 +6,8 @@
     <title>猫不卷</title>
     <script src='/static/js/jquery.js'></script>
     <script src='/static/js/bootstrap.bundle.js'></script>
+    <script src="/static/js/common.js?v=202401231214"></script>
+    <script src="/static/js/aliyun-oss-sdk-6.18.1.min.js"></script>
     <link rel="stylesheet" href='/static/css/common.css?v=202401221627'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
     <link rel="stylesheet" href='/static/css/bootstrap-icons.css'>
@@ -982,11 +984,56 @@
 </div>
 
 <script>
+    var client
     $(function () {
-
+        $.get('/api/sts/info', function(data, status) {
+            client = new OSS({
+                // yourRegion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
+                region: 'oss-cn-hangzhou',
+                // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
+                accessKeyId: data.accessKeyId,
+                accessKeySecret: data.accessKeySecret,
+                // 从STS服务获取的安全令牌（SecurityToken）。
+                stsToken: data.stsToken,
+                refreshSTSToken: async () => {
+                    // 向您搭建的STS服务获取临时访问凭证。
+                    const info = await fetch('/api/sts/info');
+                    return {
+                        accessKeyId: info.accessKeyId,
+                        accessKeySecret: info.accessKeySecret,
+                        stsToken: info.stsToken
+                    }
+                },
+                // 刷新临时访问凭证的时间间隔，单位为毫秒。
+                refreshSTSTokenInterval: 300000,
+                // 填写Bucket名称。
+                bucket: 'cat-no-roll'
+            });
+        })
     })
 
-    function uploadImg(inputFile, limit) {
+    async function put(file, wechatCode, fileName) {
+        try {
+            // object表示上传到OSS的文件名称。
+            // file表示浏览器中需要上传的文件，支持HTML5 file和Blob类型。
+            const r1 = await client.put(wechatCode + "/" + fileName, file);
+            console.log('put success: %j', r1);
+            // const r2 = await client.get(fileName);
+            // console.log('get success: %j', r2);
+        } catch (e) {
+            console.error('error: %j', e);
+        }
+    }
+
+    async function test1(value) {
+        return new Promise(resolve => {
+            setTimeout(()=> {
+                console.log(value)
+            }, 1000)
+        })
+    }
+
+    async function uploadImg(inputFile, limit) {
         let fileId = $(inputFile).attr("id")
         var files = $(inputFile)[0].files;
         if (files.length === 0) {
@@ -996,17 +1043,26 @@
             alert('一次性最多上传'+limit+'张照片')
             return;
         }
-        uploadFile(files, fileId, 0)
+        await uploadFile(files, fileId, 0)
     }
 
-    function uploadFile(files, fileId, index) {
+    async function uploadFile(files, fileId, index) {
         try {
             if (files.length <= index) {
                 return
             }
             console.info(files);
+            let wechatCode = ${code}
+            let fileName = files[index].name;
+            let fileExt = fileName.substring(fileName.lastIndexOf("."));
+            let newFileName = uuidC() + fileExt
+            await put(files[index], wechatCode, newFileName)
+            // console.log('put success')
+            let newFileKey = wechatCode + "/" + newFileName
+
             var formData = new FormData();
-            formData.append("file", files[index]);
+            formData.append("fileUrl", newFileKey);
+            formData.append("fileName", newFileName);
             $.ajax({
                 url: "/api/upload/img/upload?fileId="+fileId+"&fileIndex="+index+"&wechatCode=${code}",
                 type: 'post',
@@ -1033,7 +1089,7 @@
         }
     }
 
-    function uploadVideo(inputFile, limit) {
+    async function uploadVideo(inputFile, limit) {
         let fileId = $(inputFile).attr("id")
         var files = $(inputFile)[0].files;
         if (files.length === 0) {
@@ -1043,17 +1099,26 @@
             alert('一次性最多上传'+limit+'个视频')
             return;
         }
-        uploadVideoFile(files, fileId, 0)
+        await uploadVideoFile(files, fileId, 0)
     }
 
-    function uploadVideoFile(files, fileId, index) {
+    async function uploadVideoFile(files, fileId, index) {
         try {
             if (files.length <= index) {
                 return
             }
             console.info(files);
+            let wechatCode = ${code}
+            let fileName = files[index].name;
+            let fileExt = fileName.substring(fileName.lastIndexOf("."));
+            let newFileName = uuidC() + fileExt
+            await put(files[index], wechatCode, newFileName)
+            // console.log('put success')
+            let newFileKey = wechatCode + "/" + newFileName
+
             var formData = new FormData();
-            formData.append("file", files[index]);
+            formData.append("fileUrl", newFileKey);
+            formData.append("fileName", newFileName);
             $.ajax({
                 url: "/api/upload/video/upload?fileId="+fileId+"&fileIndex="+index+"&wechatCode=${code}",
                 type: 'post',
@@ -1079,7 +1144,7 @@
         }
     }
 
-    function cutImage(url, imgJqObj, files, fileId, index) {
+    /*function cutImage(url, imgJqObj, files, fileId, index) {
         $("#fileVideo").attr("src", url)
         let video = $("#fileVideo")[0]
         let canvas = $("#videoCanvas")[0]
@@ -1098,7 +1163,7 @@
             $("#fileVideo").attr("src", "")
             uploadVideoFile(files, fileId, index)
         }
-    }
+    }*/
 
     function showVideoModal(videoUrl, btn) {
         $("#modalVideo").attr('src', videoUrl)
