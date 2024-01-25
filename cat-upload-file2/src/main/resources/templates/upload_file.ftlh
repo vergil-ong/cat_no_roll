@@ -8,9 +8,11 @@
     <script src='/static/js/bootstrap.bundle.js'></script>
     <script src="/static/js/common.js?v=202401231214"></script>
     <script src="/static/js/aliyun-oss-sdk-6.18.1.min.js"></script>
+    <script src="/static/js/wave.js"></script>
     <link rel="stylesheet" href='/static/css/common.css?v=202401221627'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
     <link rel="stylesheet" href='/static/css/bootstrap-icons.css'>
+    <link rel="stylesheet" href='/static/css/wave.css'>
 
     <style>
         body {
@@ -46,6 +48,12 @@
         .img-div i {
             margin-left: 5px;
             font-size: 15px;
+        }
+        .container .img-div-num {
+            position:absolute;
+            top:20px;
+            left:0;
+            z-index:1000
         }
         .container .img-play {
             opacity: 0.5;
@@ -143,6 +151,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadImg1-0" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadImg1-0"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadImg1-0" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadImg1-0">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -150,6 +164,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadImg1-1" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadImg1-1"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadImg1-1" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadImg1-1">0%</span>
                         </div>
                     </div>
                 </div>
@@ -215,6 +235,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo1-0" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo1-0"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo1-0" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo1-0">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -222,6 +248,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo1-1" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo1-1"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo1-1" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo1-1">0%</span>
                         </div>
                     </div>
                 </div>
@@ -293,6 +325,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo2-0" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo2-0"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo2-0" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo2-0">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -300,6 +338,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo2-1" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo2-1"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo2-1" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo2-1">0%</span>
                         </div>
                     </div>
                 </div>
@@ -357,6 +401,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo2-2" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo2-2"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo2-2" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo2-2">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -364,6 +414,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo2-3" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo2-3"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo2-3" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo2-3">0%</span>
                         </div>
                     </div>
                 </div>
@@ -425,6 +481,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadImg3-0" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadImg3-0"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadImg3-0" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadImg3-0">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -432,6 +494,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadImg3-1" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadImg3-1"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadImg3-1" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadImg3-1">0%</span>
                         </div>
                     </div>
                 </div>
@@ -477,6 +545,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadImg3-2" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadImg3-2"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadImg3-2" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadImg3-2">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -484,6 +558,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadImg3-3" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadImg3-3"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadImg3-3" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadImg3-3">0%</span>
                         </div>
                     </div>
                 </div>
@@ -527,6 +607,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadImg3-4" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadImg3-4"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadImg3-4" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadImg3-4">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -534,6 +620,11 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
+                        </div>'<div class="img-div" id="canvasDiv-uploadImg3-5" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadImg3-5"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadImg3-5" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadImg3-5">0%</span>
                         </div>
                     </div>
                 </div>
@@ -596,6 +687,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo3-0" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo3-0"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo3-0" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo3-0">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -603,6 +700,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo3-1" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo3-1"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo3-1" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo3-1">0%</span>
                         </div>
                     </div>
                 </div>
@@ -658,6 +761,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo3-2" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo3-2"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo3-2" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo3-2">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -665,6 +774,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo3-3" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo3-3"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo3-3" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo3-3">0%</span>
                         </div>
                     </div>
                 </div>
@@ -720,6 +835,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo3-4" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo3-4"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo3-4" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo3-4">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -727,6 +848,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo3-5" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo3-5"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo3-5" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo3-5">0%</span>
                         </div>
                     </div>
                 </div>
@@ -801,6 +928,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo4-0" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo4-0"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo4-0" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo4-0">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -808,6 +941,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo4-1" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo4-1"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo4-1" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo4-1">0%</span>
                         </div>
                     </div>
                 </div>
@@ -863,6 +1002,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo4-2" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo4-2"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo4-2" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo4-2">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -870,6 +1015,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo4-3" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo4-3"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo4-3" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo4-3">0%</span>
                         </div>
                     </div>
                 </div>
@@ -923,6 +1074,12 @@
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
                         </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo4-4" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo4-4"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo4-4" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo4-4">0%</span>
+                        </div>
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
@@ -930,6 +1087,12 @@
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
+                        </div>
+                        <div class="img-div" id="canvasDiv-uploadVideo4-5" style="display: none">
+                            <canvas class="wave-canvas" id="canvas-uploadVideo4-5"></canvas>
+                        </div>
+                        <div class="img-div-num" id="proNum-uploadVideo4-5" style="display: none">
+                            <span class="wave-proNum" id="proNumSp-uploadVideo4-5">0%</span>
                         </div>
                     </div>
                 </div>
@@ -1029,7 +1192,7 @@
         "x-oss-forbid-overwrite": "true",
     };
 
-    async function put(file, wechatCode, fileName) {
+    async function put(file, wechatCode, fileName, fileId, fileIndex) {
         try {
             // object表示上传到OSS的文件名称。
             // file表示浏览器中需要上传的文件，支持HTML5 file和Blob类型。
@@ -1037,12 +1200,20 @@
             // console.log('put success: %j', r1);
             // const r2 = await client.get(fileName);
             // console.log('get success: %j', r2);
+            $("#canvasDiv-"+fileId+"-"+fileIndex).show()
+            $("#proNum-"+fileId+"-"+fileIndex).show()
+            let canvasVideo = $("#canvas-"+fileId+"-"+fileIndex)
+            var waveVideo = new Wave("canvas-"+fileId+"-"+fileIndex, "proNumSp-"+fileId+"-"+fileIndex,
+                canvasVideo.width(), canvasVideo.height())
+            waveVideo.init()
+
             const name = wechatCode + "/" + fileName;
             // 获取DOM。
             const options = {
                 // 获取分片上传进度、断点和返回值。
                 progress: (p, cpt, res) => {
                     console.log(p);
+                    waveVideo.draw(p*100)
                 },
                 // 设置并发上传的分片数量。
                 parallel: 4,
@@ -1094,7 +1265,7 @@
             let fileName = files[index].name;
             let fileExt = fileName.substring(fileName.lastIndexOf("."));
             let newFileName = uuidC() + fileExt
-            await put(files[index], wechatCode, newFileName)
+            await put(files[index], wechatCode, newFileName, fileId, index)
             // console.log('put success')
             let newFileKey = wechatCode + "/" + newFileName
 
@@ -1111,10 +1282,14 @@
                 error:function (res) {
                     index += 1
                     uploadFile(files, fileId, index)
+                    $("#canvasDiv-"+fileId+"-"+index).hide()
+                    $("#proNum-"+fileId+"-"+index).hide()
                 },
                 success: function (res) {
                     $("."+fileId+":eq("+index+")").attr("src", res)
                     console.log('success res ', res)
+                    $("#canvasDiv-"+fileId+"-"+index).hide()
+                    $("#proNum-"+fileId+"-"+index).hide()
 
                     index += 1
                     uploadFile(files, fileId, index)
@@ -1150,7 +1325,7 @@
             let fileName = files[index].name;
             let fileExt = fileName.substring(fileName.lastIndexOf("."));
             let newFileName = uuidC() + fileExt
-            await put(files[index], wechatCode, newFileName)
+            await put(files[index], wechatCode, newFileName, fileId, index)
             // console.log('put success')
             let newFileKey = wechatCode + "/" + newFileName
 
@@ -1167,10 +1342,14 @@
                 error:function (res) {
                     index += 1
                     uploadVideoFile(files, fileId, index)
+                    $("#canvasDiv-"+fileId+"-"+index).hide()
+                    $("#proNum-"+fileId+"-"+index).hide()
                 },
                 success: function (res) {
                     console.log('success res ', res)
                     $("."+fileId+":eq("+index+")").attr("src", res.imageUrl)
+                    $("#canvasDiv-"+fileId+"-"+index).hide()
+                    $("#proNum-"+fileId+"-"+index).hide()
                     index += 1
                     uploadVideoFile(files, fileId, index)
                 }
