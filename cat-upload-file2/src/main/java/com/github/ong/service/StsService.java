@@ -3,6 +3,7 @@ package com.github.ong.service;
 import com.aliyun.sts20150401.Client;
 import com.aliyun.sts20150401.models.AssumeRoleResponse;
 import com.aliyun.sts20150401.models.AssumeRoleResponseBody;
+import com.github.ong.utils.AliyunUtil;
 import com.github.ong.utils.StringUtil;
 import com.github.ong.vo.StsInfo;
 import com.google.common.cache.CacheBuilder;
@@ -44,8 +45,8 @@ public class StsService {
     public StsInfo getStsInfo() {
         String endpoint = "sts.cn-hangzhou.aliyuncs.com";
         // cat-no-roll@1254504270607038.onaliyun.com
-        String accessKeyId = "LTAI5t6RXw3rgXyPQQeXA23v";
-        String accessKeySecret = "8NyhkXjXDBuPSZumpDL4x5GxvIHb7Z";
+        String accessKeyId = AliyunUtil.accessKeyId;
+        String accessKeySecret = AliyunUtil.accessKeySecret;
         // RamOss roleArn
         String roleArn = "acs:ram::1254504270607038:role/ramoss";
         // 自定义角色会话名称，用来区分不同的令牌，例如可填写为SessionTest。

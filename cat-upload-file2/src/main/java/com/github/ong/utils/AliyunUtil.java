@@ -6,4 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AliyunUtil {
 
     public static final String SSO_ROOT = "https://cat-no-roll.oss-cn-hangzhou.aliyuncs.com/";
+
+    public static final String accessKeyId = "";
+    public static final String accessKeySecret = "";
 }

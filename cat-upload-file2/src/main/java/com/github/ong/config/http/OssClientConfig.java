@@ -3,6 +3,7 @@ package com.github.ong.config.http;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSClientBuilder;
+import com.github.ong.utils.AliyunUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +15,8 @@ public class OssClientConfig {
     @Bean("ossClient")
     public OSS buildOssClient() {
         String endpoint = "https://oss-cn-hangzhou.aliyuncs.com";
-        String accessKeyId = "LTAI5t6RXw3rgXyPQQeXA23v";
-        String accessKeySecret = "8NyhkXjXDBuPSZumpDL4x5GxvIHb7Z";
+        String accessKeyId = AliyunUtil.accessKeyId;
+        String accessKeySecret = AliyunUtil.accessKeySecret;
         return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
     }
 }
