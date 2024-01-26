@@ -1261,7 +1261,7 @@
                 return
             }
             console.info(files);
-            let wechatCode = ${code}
+            let wechatCode = '${code}'
             let fileName = files[index].name;
             let fileExt = fileName.substring(fileName.lastIndexOf("."));
             let newFileName = uuidC() + fileExt
@@ -1321,7 +1321,7 @@
                 return
             }
             console.info(files);
-            let wechatCode = ${code}
+            let wechatCode = '${code}'
             let fileName = files[index].name;
             let fileExt = fileName.substring(fileName.lastIndexOf("."));
             let newFileName = uuidC() + fileExt
