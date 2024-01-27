@@ -9,6 +9,7 @@ import com.github.ong.enums.db.WholeAddr;
 import com.github.ong.model.h2.AdminUploadVideo;
 import com.github.ong.model.h2.FileAddr;
 import com.github.ong.utils.AliyunUtil;
+import com.github.ong.utils.FileUtil;
 import com.github.ong.vo.AdminUploadVideoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -73,11 +74,11 @@ public class AdminUploadVideoService {
             if (Objects.nonNull(videoFileAddr)) {
                 if (WholeAddr.SSO.getCode().equals(videoFileAddr.getWholeAddr())) {
                     adminUploadVideoVo.setVideoUrl(AliyunUtil.SSO_ROOT + videoFileAddr.getAddr());
+                    adminUploadVideoVo.setVideoFileName(adminUploadVideo.getId() + FileUtil.DOT + FileUtil.getFileSuffix(videoFileAddr.getOriginalFileName()));
                 } else {
                     adminUploadVideoVo.setVideoUrl(videoFileAddr.getAddr());
+                    adminUploadVideoVo.setVideoFileName(videoFileAddr.getOriginalFileName());
                 }
-
-                adminUploadVideoVo.setVideoFileName(videoFileAddr.getOriginalFileName());
             }
 
             FileAddr imgFileAddr = fileAddrMap.get(adminUploadVideo.getVideoImgId());

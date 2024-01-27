@@ -43,6 +43,9 @@
                 <label class="btn btn-info" for="uploadFile" style="display: block;margin: 0" >视频上传</label>
                 <input type="file" id="uploadFile" accept="video/*" multiple class="no-display" onchange="uploadVideo(this)">
             </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info" onclick="batchDownload()" >批量下载</button>
+            </div>
         </div>
     </div>
     <div class="row" style="margin-top: 10px">
@@ -50,6 +53,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
+                    <th><input type="checkbox" class="form-check-inline" onclick="checkAll(this)"> 全选</th>
                     <th>视频ID</th>
                     <th>视频截图</th>
                     <th>用户下载次数</th>
@@ -170,15 +174,20 @@
         }
         let wechatCode = $("#wechatCode").val()
         loading()
-        let fileName = files[0].name;
-        let fileExt = fileName.substring(fileName.lastIndexOf("."));
-        let newFileName = uuidC() + fileExt
-        await put(files[0], wechatCode, newFileName)
-        let newFileKey = wechatCode + "/" + newFileName
-
+        let fileUrlArray = []
+        let fileNameArray = []
+        for (let i = 0; i < files.length; i++) {
+            let fileName = files[i].name;
+            let fileExt = fileName.substring(fileName.lastIndexOf("."));
+            let newFileName = uuidC() + fileExt
+            await put(files[i], wechatCode, newFileName)
+            let newFileKey = wechatCode + "/" + newFileName
+            fileUrlArray.push(newFileKey)
+            fileNameArray.push(newFileName)
+        }
         var formData = new FormData();
-        formData.append("fileUrl", newFileKey);
-        formData.append("fileName", newFileName);
+        formData.append("fileUrlList", fileUrlArray);
+        formData.append("fileNameList", fileNameArray);
         $.ajax({
             url: "/api/upload/admin/sso/video?wechatCode="+wechatCode,
             type: 'post',
@@ -233,11 +242,12 @@
                 }
                 let videoTbHtml = ""
                 for (let adminUploadVideoVo of res.data) {
+                    let videoUrl = adminUploadVideoVo.videoUrl
                     videoTbHtml += "<tr>"
+                    videoTbHtml += "    <td><input type='checkbox' class='admin-upload-ch' data-video-url='"+videoUrl+"' data-video-name='"+adminUploadVideoVo.videoFileName+"'> </td>"
                     videoTbHtml += "    <td>"+adminUploadVideoVo.adminUploadVideo.id+"</td>"
                     videoTbHtml += "    <td><img class=\"video-screen\" src=\""+adminUploadVideoVo.imgUrl+"\"></td>"
                     videoTbHtml += "    <td>"+adminUploadVideoVo.adminUploadVideo.userDownCount+"</td>"
-                    let videoUrl = adminUploadVideoVo.videoUrl
                     videoTbHtml += "    <td>" +
                                             "<button type=\"button\" class=\"btn btn-info\" onclick='downloadVideo(\""+videoUrl+"\", \""+adminUploadVideoVo.videoFileName+"\")'>下载</button>" +
                                             "<button type=\"button\" class=\"btn btn-danger\" onclick='deleteVideo(\""+adminUploadVideoVo.adminUploadVideo.id+"\")'>删除</button>" +
@@ -268,6 +278,28 @@
 
     function downloadVideo(videoUrl, videoName) {
         download(videoUrl, videoName, 'application/octet-stream')
+    }
+
+    function checkAll(checkBoxInput) {
+        let checkBoxInputJq = $(checkBoxInput)
+        let checkALLStatus = checkBoxInputJq.prop("checked")
+        if (checkALLStatus) {
+            $(".admin-upload-ch").prop("checked", true)
+        } else {
+            $(".admin-upload-ch").prop("checked", false)
+        }
+
+    }
+
+    function batchDownload() {
+        $(".admin-upload-ch").each(function(index, e){
+            let checkBoxItemJq = $(e)
+            let checkALLStatus = checkBoxItemJq.prop("checked")
+            if (!checkALLStatus) {
+                return
+            }
+            downloadVideo(checkBoxItemJq.data('video-url'), checkBoxItemJq.data('video-name'))
+        })
     }
 
 </script>

@@ -146,7 +146,8 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg1" data-index="0" src="${userUploadInfo.beforeImg1Url?default('/static/imgs/emptyImg.png')}">
+                            <img class="uploadImg1" data-index="0" src="${userUploadInfo.beforeImg1Url?default('/static/imgs/emptyImg.png')}"
+                                 onclick="showImageModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -160,7 +161,8 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg1" data-index="1" src="${userUploadInfo.beforeImg2Url?default('/static/imgs/emptyImg.png')}">
+                            <img class="uploadImg1" data-index="1" src="${userUploadInfo.beforeImg2Url?default('/static/imgs/emptyImg.png')}"
+                                 onclick="showImageModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -230,7 +232,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo1" data-index="0" src="${userUploadInfo.beforeVideoImg1Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo1" data-index="0" src="${userUploadInfo.beforeVideoImg1Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.beforeVideo1Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -244,7 +248,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo1" data-index="1" src="${userUploadInfo.beforeVideoImg2Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo1" data-index="1" src="${userUploadInfo.beforeVideoImg2Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.beforeVideo2Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -320,7 +326,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo2" data-index="0" src="${userUploadInfo.installVideoImg1Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo2" data-index="0" src="${userUploadInfo.installVideoImg1Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.installVideo1Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -334,7 +342,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo2" data-index="1" src="${userUploadInfo.installVideoImg2Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo2" data-index="1" src="${userUploadInfo.installVideoImg2Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.installVideo2Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -396,7 +406,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo2" data-index="2" src="${userUploadInfo.installVideoImg3Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo2" data-index="2" src="${userUploadInfo.installVideoImg3Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.installVideo3Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -410,7 +422,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo2" data-index="3" src="${userUploadInfo.installVideoImg4Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo2" data-index="3" src="${userUploadInfo.installVideoImg4Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.installVideo4Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -476,7 +490,8 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="0" src="${userUploadInfo.displayImg1Url?default('/static/imgs/emptyImg.png')}" />
+                            <img class="uploadImg3" data-index="0" src="${userUploadInfo.displayImg1Url?default('/static/imgs/emptyImg.png')}"
+                                 onclick="showImageModal(this)"/>
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -490,7 +505,8 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="1" src="${userUploadInfo.displayImg2Url?default('/static/imgs/emptyImg.png')}" />
+                            <img class="uploadImg3" data-index="1" src="${userUploadInfo.displayImg2Url?default('/static/imgs/emptyImg.png')}"
+                                 onclick="showImageModal(this)"/>
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -540,7 +556,8 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="2" src="${userUploadInfo.displayImg3Url?default('/static/imgs/emptyImg.png')}" />
+                            <img class="uploadImg3" data-index="2" src="${userUploadInfo.displayImg3Url?default('/static/imgs/emptyImg.png')}"
+                                 onclick="showImageModal(this)"/>
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -554,7 +571,8 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="3" src="${userUploadInfo.displayImg4Url?default('/static/imgs/emptyImg.png')}" />
+                            <img class="uploadImg3" data-index="3" src="${userUploadInfo.displayImg4Url?default('/static/imgs/emptyImg.png')}"
+                                 onclick="showImageModal(this)"/>
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -602,7 +620,8 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="4" src="${userUploadInfo.displayImg5Url?default('/static/imgs/emptyImg.png')}" />
+                            <img class="uploadImg3" data-index="4" src="${userUploadInfo.displayImg5Url?default('/static/imgs/emptyImg.png')}"
+                                 onclick="showImageModal(this)"/>
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -616,7 +635,8 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="5" src="${userUploadInfo.displayImg6Url?default('/static/imgs/emptyImg.png')}" />
+                            <img class="uploadImg3" data-index="5" src="${userUploadInfo.displayImg6Url?default('/static/imgs/emptyImg.png')}"
+                                 onclick="showImageModal(this)"/>
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -682,7 +702,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="0" src="${userUploadInfo.displayVideoImg1Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo3" data-index="0" src="${userUploadInfo.displayVideoImg1Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo1Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -696,7 +718,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="1" src="${userUploadInfo.displayVideoImg2Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo3" data-index="1" src="${userUploadInfo.displayVideoImg2Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo2Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -756,7 +780,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="2" src="${userUploadInfo.displayVideoImg3Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo3" data-index="2" src="${userUploadInfo.displayVideoImg3Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo3Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -770,7 +796,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="3" src="${userUploadInfo.displayVideoImg4Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo3" data-index="3" src="${userUploadInfo.displayVideoImg4Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo4Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -830,7 +858,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="4" src="${userUploadInfo.displayVideoImg5Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo3" data-index="4" src="${userUploadInfo.displayVideoImg5Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo5Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -844,7 +874,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="5" src="${userUploadInfo.displayVideoImg6Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo3" data-index="5" src="${userUploadInfo.displayVideoImg6Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo6Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -923,7 +955,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo4" data-index="0" src="${userUploadInfo.disposeVideoImg1Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo4" data-index="0" src="${userUploadInfo.disposeVideoImg1Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.disposeVideo1Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -937,7 +971,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo4" data-index="1" src="${userUploadInfo.disposeVideoImg2Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo4" data-index="1" src="${userUploadInfo.disposeVideoImg2Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.disposeVideo2Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -997,7 +1033,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo4" data-index="2" src="${userUploadInfo.disposeVideoImg3Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo4" data-index="2" src="${userUploadInfo.disposeVideoImg3Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.disposeVideo3Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -1011,7 +1049,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo4" data-index="3" src="${userUploadInfo.disposeVideoImg4Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo4" data-index="3" src="${userUploadInfo.disposeVideoImg4Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.disposeVideo4Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -1069,7 +1109,9 @@
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo4" data-index="4" src="${userUploadInfo.disposeVideoImg5Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo4" data-index="4" src="${userUploadInfo.disposeVideoImg5Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.disposeVideo5Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -1083,7 +1125,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo4" data-index="5" src="${userUploadInfo.disposeVideoImg6Url?default('/static/imgs/emptyVideo.png')}">
+                            <img class="uploadVideo4" data-index="5" src="${userUploadInfo.disposeVideoImg6Url?default('/static/imgs/emptyVideo.png')}"
+                                 data-video-url="${userUploadInfo.disposeVideo6Url?default('/static/imgs/emptyVideo.png')}"
+                                 onclick="showUserVideoModal(this)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -1138,6 +1182,19 @@
         <div class="modal-content">
             <div class="modal-body">
                 <video controls id="modalVideo" width="300" playsinline="true"></video>
+            </div>
+            <#--<div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="height: 80vh">
+                <img src="" id="modalImage" style="object-fit: contain;width: 100%;height: 100%" />
             </div>
             <#--<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -1234,30 +1291,32 @@
         }
     }
 
-    async function test1(value) {
-        return new Promise(resolve => {
-            setTimeout(()=> {
-                console.log(value)
-            }, 1000)
-        })
-    }
-
     async function uploadImg(inputFile, limit) {
         let fileId = $(inputFile).attr("id")
         var files = $(inputFile)[0].files;
         if (files.length === 0) {
             return;
         }
-        if (files.length > limit) {
-            alert('一次性最多上传'+limit+'张照片')
+        let emptyImgArray = []
+        $("."+fileId).each(function(index, e){
+            let currentImg = $(e)
+            let src = currentImg.attr('src')
+            if (src === '/static/imgs/emptyImg.png'
+                || src === '/static/imgs/emptyVideo.png') {
+                emptyImgArray.push(currentImg.data('index'))
+            }
+        })
+        console.log('emptyImgArray ', emptyImgArray)
+        if (files.length > emptyImgArray.length) {
+            alert('本次最多上传'+emptyImgArray.length+'张照片')
             return;
         }
-        await uploadFile(files, fileId, 0)
+        await uploadFile(files, fileId, 0, emptyImgArray)
     }
 
-    async function uploadFile(files, fileId, index) {
+    async function uploadFile(files, fileId, index, emptyImgArray) {
         try {
-            if (files.length <= index) {
+            if (emptyImgArray.length <= index) {
                 return
             }
             console.info(files);
@@ -1265,7 +1324,7 @@
             let fileName = files[index].name;
             let fileExt = fileName.substring(fileName.lastIndexOf("."));
             let newFileName = uuidC() + fileExt
-            await put(files[index], wechatCode, newFileName, fileId, index)
+            await put(files[index], wechatCode, newFileName, fileId, emptyImgArray[index])
             // console.log('put success')
             let newFileKey = wechatCode + "/" + newFileName
 
@@ -1273,7 +1332,7 @@
             formData.append("fileUrl", newFileKey);
             formData.append("fileName", newFileName);
             $.ajax({
-                url: "/api/upload/img/upload?fileId="+fileId+"&fileIndex="+index+"&wechatCode=${code}",
+                url: "/api/upload/img/upload?fileId="+fileId+"&fileIndex="+emptyImgArray[index]+"&wechatCode=${code}",
                 type: 'post',
                 data: formData,
                 timeout:3*1000*1000,
@@ -1281,18 +1340,18 @@
                 processData: false,
                 error:function (res) {
                     index += 1
-                    uploadFile(files, fileId, index)
-                    $("#canvasDiv-"+fileId+"-"+index).hide()
-                    $("#proNum-"+fileId+"-"+index).hide()
+                    uploadFile(files, fileId, index, emptyImgArray)
+                    $("#canvasDiv-"+fileId+"-"+emptyImgArray[index]).hide()
+                    $("#proNum-"+fileId+"-"+emptyImgArray[index]).hide()
                 },
                 success: function (res) {
-                    $("."+fileId+":eq("+index+")").attr("src", res)
+                    $("."+fileId+":eq("+emptyImgArray[index]+")").attr("src", res)
                     console.log('success res ', res)
-                    $("#canvasDiv-"+fileId+"-"+index).hide()
-                    $("#proNum-"+fileId+"-"+index).hide()
+                    $("#canvasDiv-"+fileId+"-"+emptyImgArray[index]).hide()
+                    $("#proNum-"+fileId+"-"+emptyImgArray[index]).hide()
 
                     index += 1
-                    uploadFile(files, fileId, index)
+                    uploadFile(files, fileId, index, emptyImgArray)
                 }
             })
         } catch (e) {
@@ -1308,16 +1367,26 @@
         if (files.length === 0) {
             return;
         }
-        if (files.length > limit) {
-            alert('一次性最多上传'+limit+'个视频')
+        let emptyVideoArray = []
+        $("."+fileId).each(function(index, e){
+            let currentImg = $(e)
+            let src = currentImg.attr('src')
+            if (src === '/static/imgs/emptyImg.png'
+                || src === '/static/imgs/emptyVideo.png') {
+                emptyVideoArray.push(currentImg.data('index'))
+            }
+        })
+        console.log('emptyVideoArray ', emptyVideoArray)
+        if (files.length > emptyVideoArray.length) {
+            alert('本次最多上传'+emptyVideoArray.length+'个视频')
             return;
         }
-        await uploadVideoFile(files, fileId, 0)
+        await uploadVideoFile(files, fileId, 0, emptyVideoArray)
     }
 
-    async function uploadVideoFile(files, fileId, index) {
+    async function uploadVideoFile(files, fileId, index, emptyVideoArray) {
         try {
-            if (files.length <= index) {
+            if (emptyVideoArray.length <= index) {
                 return
             }
             console.info(files);
@@ -1325,7 +1394,7 @@
             let fileName = files[index].name;
             let fileExt = fileName.substring(fileName.lastIndexOf("."));
             let newFileName = uuidC() + fileExt
-            await put(files[index], wechatCode, newFileName, fileId, index)
+            await put(files[index], wechatCode, newFileName, fileId, emptyVideoArray[index])
             // console.log('put success')
             let newFileKey = wechatCode + "/" + newFileName
 
@@ -1333,7 +1402,7 @@
             formData.append("fileUrl", newFileKey);
             formData.append("fileName", newFileName);
             $.ajax({
-                url: "/api/upload/video/upload?fileId="+fileId+"&fileIndex="+index+"&wechatCode=${code}",
+                url: "/api/upload/video/upload?fileId="+fileId+"&fileIndex="+emptyVideoArray[index]+"&wechatCode=${code}",
                 type: 'post',
                 data: formData,
                 timeout:3*1000*1000,
@@ -1341,17 +1410,20 @@
                 processData: false,
                 error:function (res) {
                     index += 1
-                    uploadVideoFile(files, fileId, index)
-                    $("#canvasDiv-"+fileId+"-"+index).hide()
-                    $("#proNum-"+fileId+"-"+index).hide()
+                    uploadVideoFile(files, fileId, index, emptyVideoArray)
+                    $("#canvasDiv-"+fileId+"-"+emptyVideoArray[index]).hide()
+                    $("#proNum-"+fileId+"-"+emptyVideoArray[index]).hide()
                 },
                 success: function (res) {
                     console.log('success res ', res)
-                    $("."+fileId+":eq("+index+")").attr("src", res.imageUrl)
-                    $("#canvasDiv-"+fileId+"-"+index).hide()
-                    $("#proNum-"+fileId+"-"+index).hide()
+                    let imgEleJq = $("."+fileId+":eq("+emptyVideoArray[index]+")")
+                    imgEleJq.attr("src", res.imageUrl)
+                    imgEleJq.attr('data-video-url', res.videoUrl)
+                    imgEleJq.data('video-url', res.videoUrl)
+                    $("#canvasDiv-"+fileId+"-"+emptyVideoArray[index]).hide()
+                    $("#proNum-"+fileId+"-"+emptyVideoArray[index]).hide()
                     index += 1
-                    uploadVideoFile(files, fileId, index)
+                    uploadVideoFile(files, fileId, index, emptyVideoArray)
                 }
             })
         } catch (e) {
@@ -1385,6 +1457,27 @@
     function showVideoModal(videoUrl, btn) {
         $("#modalVideo").attr('src', videoUrl)
         $("#videoModal").modal('show')
+    }
+
+    function showUserVideoModal(imgEle) {
+        let imgEleJq = $(imgEle)
+        let imgSrc = imgEleJq.attr('src')
+        let videoUrl = imgEleJq.data('video-url')
+        if (imgSrc === '/static/imgs/emptyVideo.png'
+            || videoUrl === '/static/imgs/emptyVideo.png') {
+            return false
+        }
+        $("#modalVideo").attr('src', videoUrl)
+        $("#videoModal").modal('show')
+    }
+
+    function showImageModal(imgEle) {
+        let imgSrc = $(imgEle).attr('src')
+        if (imgSrc === '/static/imgs/emptyImg.png') {
+            return false
+        }
+        $("#modalImage").attr('src', imgSrc)
+        $("#imageModal").modal('show')
     }
 
     function delImg(iconEle, imgType) {

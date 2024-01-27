@@ -5,6 +5,7 @@ import com.github.ong.enums.biz.UploadFileIndex;
 import com.github.ong.model.h2.AdminUploadVideo;
 import com.github.ong.model.h2.FileAddr;
 import com.github.ong.model.h2.UserUploadInfo;
+import com.github.ong.qo.admin.UploadQo;
 import com.github.ong.service.AdminUploadVideoService;
 import com.github.ong.service.FileAddrService;
 import com.github.ong.service.UserUploadInfoService;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -292,29 +294,40 @@ public class UploadFileApiController {
     }
 
     @RequestMapping("/admin/sso/video")
-    public ResultVo uploadAdminVideo(String wechatCode,
-                                     String fileUrl,
-                                     String fileName){
+    public ResultVo uploadAdminVideo(UploadQo uploadQo){
         ResultVo resultVo = ResultVo.fail();
-        FileAddr videoFileAddr = fileAddrService.saveSsoVideo(fileUrl, fileName);
-        if (Objects.isNull(videoFileAddr)) {
-            resultVo.setMessage("保存视频文件关联关系失败");
+        List<String> fileUrlList = uploadQo.getFileUrlList();
+        List<String> fileNameList = uploadQo.getFileNameList();
+        if (CollectionUtils.isEmpty(fileNameList) || CollectionUtils.isEmpty(fileUrlList)) {
             return resultVo;
         }
-        FileAddr imageFileAddr = fileAddrService.saveVideoFrame(fileUrl, wechatCode);
-        if (Objects.isNull(imageFileAddr)) {
-            resultVo.setMessage("保存视频截图失败");
-            return resultVo;
+        String wechatCode = uploadQo.getWechatCode();
+        int min = Math.min(fileUrlList.size(), fileNameList.size());
+
+        for (int i = 0; i < min; i++) {
+            String fileUrl = fileUrlList.get(i);
+            String fileName = fileNameList.get(i);
+            FileAddr videoFileAddr = fileAddrService.saveSsoVideo(fileUrl, fileName);
+            if (Objects.isNull(videoFileAddr)) {
+                log.info("保存视频文件关联关系失败 {} {}", fileUrl, fileName);
+            }
+
+            FileAddr imageFileAddr = fileAddrService.saveVideoFrame(fileUrl, wechatCode);
+            if (Objects.isNull(imageFileAddr)) {
+                log.info("保存视频截图失败 {} {}", fileUrl, fileName);
+            }
+
+            if (Objects.nonNull(videoFileAddr) && Objects.nonNull(imageFileAddr)) {
+                AdminUploadVideo adminUploadVideo = new AdminUploadVideo();
+                adminUploadVideo.setWechatCode(wechatCode);
+                adminUploadVideo.setVideoId(videoFileAddr.getId());
+                adminUploadVideo.setVideoImgId(imageFileAddr.getId());
+                adminUploadVideo.setUpdateTime(new Date());
+                adminUploadVideo.setUserDownCount(0);
+
+                adminUploadVideoService.recordVideo(adminUploadVideo);
+            }
         }
-
-        AdminUploadVideo adminUploadVideo = new AdminUploadVideo();
-        adminUploadVideo.setWechatCode(wechatCode);
-        adminUploadVideo.setVideoId(videoFileAddr.getId());
-        adminUploadVideo.setVideoImgId(imageFileAddr.getId());
-        adminUploadVideo.setUpdateTime(new Date());
-        adminUploadVideo.setUserDownCount(0);
-
-        adminUploadVideoService.recordVideo(adminUploadVideo);
 
         return ResultVo.success();
     }
