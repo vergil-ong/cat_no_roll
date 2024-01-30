@@ -22,6 +22,17 @@ function getFileSuffix(fileName) {
     return suffix
 }
 
+function getFileMineType(fileSuffix) {
+    // let fileType = 'application/octet-stream'
+    let fileType = ''
+    if (fileSuffix === 'mp4') {
+        fileType = 'video/mp4'
+    } else if (fileSuffix === 'mov') {
+        fileType =  'video/quicktime'
+    }
+    return fileType
+}
+
 /*
  * 根据文件名的尾缀 返回文件类型
  * @param {any} fileName 文件名
@@ -97,4 +108,28 @@ function getFileType(fileName) {
     }
     // 其他 文件类型
     return 'other';
+}
+
+function downloadFileReq(url, fileName) {
+    const req = new XMLHttpRequest();
+    req.open('GET', url, true);
+    req.responseType = 'blob'; //如果不指定，下载后文件会打不开
+    // req.setRequestHeader('Content-Type', 'application/json');
+    req.onload = function() {
+        var content = req.getResponseHeader("Content-Disposition") ;
+        downloadFile(req.response, fileName)
+    };
+    req.send();
+}
+
+function downloadFile(data, fileName) {
+    var blob = new Blob([data]);
+    var downloadElement = document.createElement('a');
+    var href = window.URL.createObjectURL(blob);
+    downloadElement.href = href;
+    downloadElement.download = fileName;
+    document.body.appendChild(downloadElement);
+    downloadElement.click();
+    document.body.removeChild(downloadElement);
+    window.URL.revokeObjectURL(href);
 }

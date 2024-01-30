@@ -127,6 +127,8 @@
 
             // 指定上传到examplebucket的Object名称，例如exampleobject.txt。
             const name = wechatCode + "/" + fileName;
+            let fileSuffix = getFileSuffix(fileName);
+            let fileMineType = getFileMineType(fileSuffix);
             // 获取DOM。
             const options = {
                 // 获取分片上传进度、断点和返回值。
@@ -142,6 +144,10 @@
                 // meta: { year: 2020, people: "test" },
                 // mime: "text/plain",
             };
+            /*if (fileMineType && fileMineType !== '') {
+                options.mime = fileMineType
+            }
+            console.log('options', options)*/
 
             const res = await client.multipartUpload(name, file, {
                 ...options,
@@ -298,7 +304,15 @@
             if (!checkALLStatus) {
                 return
             }
-            downloadVideo(checkBoxItemJq.data('video-url'), checkBoxItemJq.data('video-name'))
+            const filename = "x.mp4";
+            const response = {
+                "content-disposition": "attachment; filename="+filename,
+            };
+            let videoUrl = checkBoxItemJq.data('video-url')
+            console.log('videoUrl', videoUrl)
+            const url = client.signatureUrl(videoUrl, { response });
+            console.log(url);
+            // downloadVideo(checkBoxItemJq.data('video-url'), checkBoxItemJq.data('video-name'))
         })
     }
 

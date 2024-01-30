@@ -6,7 +6,7 @@
     <title>猫不卷</title>
     <script src='/static/js/jquery.js'></script>
     <script src='/static/js/bootstrap.bundle.js'></script>
-    <script src="/static/js/common.js?v=202401231214"></script>
+    <script src="/static/js/common.js?v=202401301725"></script>
     <script src="/static/js/aliyun-oss-sdk-6.18.1.min.js"></script>
     <script src="/static/js/wave.js"></script>
     <link rel="stylesheet" href='/static/css/common.css?v=202401221627'>
@@ -1265,6 +1265,8 @@
             waveVideo.init()
 
             const name = wechatCode + "/" + fileName;
+            // let fileSuffix = getFileSuffix(fileName);
+            // let fileMineType = getFileMineType(fileSuffix);
             // 获取DOM。
             const options = {
                 // 获取分片上传进度、断点和返回值。
@@ -1279,8 +1281,13 @@
                 // headers,
                 // 自定义元数据，通过HeadObject接口可以获取Object的元数据。
                 // meta: { year: 2020, people: "test" },
+                mime: "application/octet-stream",
                 // mime: "text/plain",
             };
+            // if (fileMineType && fileMineType !== '') {
+            //     options.mime = fileMineType
+            // }
+            console.log('options', options)
 
             const res = await client.multipartUpload(name, file, {
                 ...options,
@@ -1288,6 +1295,7 @@
             console.log(res);
         } catch (e) {
             console.error('error: %j', e);
+            // alert(e)
         }
     }
 
@@ -1317,6 +1325,9 @@
     async function uploadFile(files, fileId, index, emptyImgArray) {
         try {
             if (emptyImgArray.length <= index) {
+                return
+            }
+            if (files.length <= index) {
                 return
             }
             console.info(files);
@@ -1387,6 +1398,9 @@
     async function uploadVideoFile(files, fileId, index, emptyVideoArray) {
         try {
             if (emptyVideoArray.length <= index) {
+                return
+            }
+            if (files.length <= index) {
                 return
             }
             console.info(files);
