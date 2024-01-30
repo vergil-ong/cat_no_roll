@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import java.util.List;
 
 @Getter
 @Setter
@@ -99,4 +100,6 @@ public class UserUploadInfoVo {
     private String disposeVideo6Url;
 
     private String disposeVideoImg6Url;
+
+    private List<AdminUploadVideoVo> adminUploadVideoVoList;
 }

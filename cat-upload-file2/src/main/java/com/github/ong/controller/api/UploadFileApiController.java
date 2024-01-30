@@ -1,5 +1,7 @@
 package com.github.ong.controller.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ong.bo.FileBo;
 import com.github.ong.enums.biz.UploadFileIndex;
 import com.github.ong.model.h2.AdminUploadVideo;
@@ -14,7 +16,9 @@ import com.github.ong.utils.StringUtil;
 import com.github.ong.utils.VideoFrameUtil;
 import com.github.ong.vo.AdminUploadVideoVo;
 import com.github.ong.vo.FileUploadVo;
+import com.github.ong.vo.UserUploadInfoVo;
 import com.github.ong.vo.common.ResultVo;
+import com.github.ong.vo.common.TablePageVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -62,8 +66,8 @@ public class UploadFileApiController {
     @Resource
     private AdminUploadVideoService adminUploadVideoService;
 
-    @Resource(name = "outRestTemplate")
-    private RestTemplate outRestTemplate;
+    @Resource
+    private ObjectMapper objectMapper;
 
     @RequestMapping("/img/upload")
     public String uploadImage(String wechatCode,
@@ -396,8 +400,26 @@ public class UploadFileApiController {
     }
 
     @RequestMapping("/admin/video/delete")
-    public ResultVo deleteAdminVideo(Long adminVideoId) {
-        adminUploadVideoService.deleteVideo(adminVideoId);
+    public ResultVo deleteAdminVideo(Long adminVideoId, String wechatCode) {
+        if (Objects.nonNull(adminVideoId)) {
+            adminUploadVideoService.deleteVideo(adminVideoId);
+        }
+        if (StringUtils.isNotBlank(wechatCode)) {
+            adminUploadVideoService.deleteVideo(wechatCode);
+        }
+
+        return ResultVo.success();
+    }
+
+    @RequestMapping("/admin/user/video/list")
+    public TablePageVo<UserUploadInfoVo> listUserUploadVideo(UploadQo uploadQo) throws JsonProcessingException {
+        log.info("listUserUploadVideo uploadQo is {}", objectMapper.writeValueAsString(uploadQo));
+        return userUploadInfoService.pageUploadInfo(uploadQo);
+    }
+
+    @RequestMapping("/admin/video/batch/delete")
+    public ResultVo batchDeleteAdminVideo(UploadQo uploadQo) {
+        userUploadInfoService.batchDeleteVideo(uploadQo);
         return ResultVo.success();
     }
 }

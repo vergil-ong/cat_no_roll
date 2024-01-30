@@ -140,7 +140,7 @@
                 // headers,
                 // 自定义元数据，通过HeadObject接口可以获取Object的元数据。
                 // meta: { year: 2020, people: "test" },
-                mime: "text/plain",
+                // mime: "text/plain",
             };
 
             const res = await client.multipartUpload(name, file, {

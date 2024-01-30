@@ -1,21 +1,35 @@
 package com.github.ong.service;
 
+import com.github.ong.dao.h2.AdminUploadVideoDao;
 import com.github.ong.dao.h2.FileAddrDao;
 import com.github.ong.dao.h2.UserUploadInfoDao;
 import com.github.ong.enums.biz.UploadFileIndex;
 import com.github.ong.enums.db.WholeAddr;
+import com.github.ong.model.h2.AdminUploadVideo;
 import com.github.ong.model.h2.FileAddr;
 import com.github.ong.model.h2.UserUploadInfo;
+import com.github.ong.qo.admin.UploadQo;
 import com.github.ong.utils.AliyunUtil;
 import com.github.ong.utils.BeanUtil;
+import com.github.ong.utils.StringUtil;
+import com.github.ong.utils.UploadUserInfoUtil;
+import com.github.ong.vo.AdminUploadVideoVo;
 import com.github.ong.vo.UserUploadInfoVo;
+import com.github.ong.vo.common.TablePageVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
 import java.io.File;
 import java.util.*;
 import java.util.function.Function;
@@ -42,6 +56,9 @@ public class UserUploadInfoService {
     @Resource
     private FileAddrDao fileAddrDao;
 
+    @Resource
+    private AdminUploadVideoDao adminUploadVideoDao;
+
     public UserUploadInfoVo getUploadInfo(String wechatCode) {
         UserUploadInfoVo resultVo = new UserUploadInfoVo();
         if (StringUtils.isBlank(wechatCode)) {
@@ -58,22 +75,105 @@ public class UserUploadInfoService {
 
         List<Long> fileIdList = new ArrayList<>();
 
-
-        addBefore(userUploadInfo, fileIdList);
-        addInstall(userUploadInfo, fileIdList);
-        addDisplay(userUploadInfo, fileIdList);
-        addDispose(userUploadInfo, fileIdList);
+        addFieldList(userUploadInfo, fileIdList);
 
         Map<Long, FileAddr> fileAddrMap = fileAddrDao.findAllById(fileIdList)
                 .stream()
                 .collect(Collectors.toMap(FileAddr::getId, Function.identity(), (a, b) -> b));
 
+        setUserUploadInfoVo(fileAddrMap, userUploadInfo, resultVo);
+
+        return resultVo;
+    }
+
+    private void addFieldList(UserUploadInfo userUploadInfo, List<Long> fileIdList) {
+        addBefore(userUploadInfo, fileIdList);
+        addInstall(userUploadInfo, fileIdList);
+        addDisplay(userUploadInfo, fileIdList);
+        addDispose(userUploadInfo, fileIdList);
+    }
+
+    private void setUserUploadInfoVo(Map<Long, FileAddr> fileAddrMap,
+                                     UserUploadInfo userUploadInfo,
+                                     UserUploadInfoVo resultVo) {
         setBefore(fileAddrMap, userUploadInfo, resultVo);
         setInstall(fileAddrMap, userUploadInfo, resultVo);
         setDisplay(fileAddrMap, userUploadInfo, resultVo);
         setDispose(fileAddrMap, userUploadInfo, resultVo);
+    }
 
-        return resultVo;
+    public TablePageVo<UserUploadInfoVo> pageUploadInfo(UploadQo uploadQo) {
+        String wechatCode = uploadQo.getWechatCode();
+
+        Page<UserUploadInfo> userUploadInfoPage = userUploadInfoDao.findAll(((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            predicateList.add(criteriaBuilder.notEqual(root.get("wechatCode"), UploadUserInfoUtil.WECHAT_CODE_ADMIN));
+            if (StringUtils.isNotBlank(wechatCode)) {
+                predicateList.add(criteriaBuilder.equal(root.get("wechatCode"), wechatCode));
+            }
+            return criteriaQuery.where(predicateList.toArray(new Predicate[0])).getRestriction();
+        }), PageRequest.of(uploadQo.getPage(), uploadQo.getLimit()));
+        TablePageVo<UserUploadInfoVo> tablePageVo = new TablePageVo<>();
+        List<UserUploadInfo> userUploadInfoList = userUploadInfoPage.getContent();
+        if (CollectionUtils.isEmpty(userUploadInfoList)) {
+            tablePageVo.setRows(Collections.emptyList());
+            tablePageVo.setTotal((int) userUploadInfoPage.getTotalElements());
+            return tablePageVo;
+        }
+
+        List<Long> fileIdList = new ArrayList<>();
+        List<String> wechatCodeList = new ArrayList<>();
+        for (UserUploadInfo userUploadInfo : userUploadInfoList) {
+            addFieldList(userUploadInfo, fileIdList);
+            wechatCodeList.add(userUploadInfo.getWechatCode());
+        }
+
+        Map<String, List<AdminUploadVideo>> adminUploadVideoWechatMap = adminUploadVideoDao.findAll((root, criteriaQuery, criteriaBuilder) -> {
+                    List<Predicate> predicateList = new ArrayList<>();
+                    if (!CollectionUtils.isEmpty(wechatCodeList)) {
+                        CriteriaBuilder.In<Object> wechatCodeIn = criteriaBuilder.in(root.get("wechatCode"));
+                        for (String wechatCodeParam : wechatCodeList) {
+                            wechatCodeIn.value(wechatCodeParam);
+                        }
+                        predicateList.add(wechatCodeIn);
+                    }
+
+                    return criteriaQuery.where(predicateList.toArray(new Predicate[0])).getRestriction();
+                }).stream()
+                .map(adminUploadVideo -> {
+                    fileIdList.add(adminUploadVideo.getVideoImgId());
+                    fileIdList.add(adminUploadVideo.getVideoId());
+                    return adminUploadVideo;
+                })
+                .collect(Collectors.groupingBy(AdminUploadVideo::getWechatCode));
+
+
+        Map<Long, FileAddr> fileAddrMap = fileAddrDao.findAllById(fileIdList)
+                .stream()
+                .collect(Collectors.toMap(FileAddr::getId, Function.identity(), (a, b) -> b));
+        List<UserUploadInfoVo> userUploadInfoVoList = new ArrayList<>();
+        for (UserUploadInfo userUploadInfo : userUploadInfoList) {
+            UserUploadInfoVo userUploadInfoVo = new UserUploadInfoVo();
+            userUploadInfoVo.setUserUploadInfo(userUploadInfo);
+            setUserUploadInfoVo(fileAddrMap, userUploadInfo, userUploadInfoVo);
+            userUploadInfoVoList.add(userUploadInfoVo);
+
+            String wechatCodeItem = userUploadInfo.getWechatCode();
+            List<AdminUploadVideo> adminUploadVideoList = adminUploadVideoWechatMap.get(wechatCodeItem);
+            List<AdminUploadVideoVo> adminUploadVideoVoList = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(adminUploadVideoList)) {
+                for (AdminUploadVideo adminUploadVideo : adminUploadVideoList) {
+                    AdminUploadVideoVo adminUploadVideoVo = UploadUserInfoUtil.getAdminUploadVideoVo(adminUploadVideo, fileAddrMap);
+                    adminUploadVideoVoList.add(adminUploadVideoVo);
+                }
+                userUploadInfoVo.setAdminUploadVideoVoList(adminUploadVideoVoList);
+            }
+        }
+
+        tablePageVo.setRows(userUploadInfoVoList);
+        tablePageVo.setTotal((int) userUploadInfoPage.getTotalElements());
+
+        return tablePageVo;
     }
 
     private void addBefore(UserUploadInfo userUploadInfo, List<Long> fileIdList) {
@@ -598,5 +698,117 @@ public class UserUploadInfoService {
                 break;
         }
         userUploadInfoDao.save(userUploadInfoDB);
+    }
+
+    public void batchDeleteVideo(UploadQo uploadQo) {
+        List<String> checkIdList = uploadQo.getCheckIdList();
+        if (CollectionUtils.isEmpty(checkIdList)) {
+            return;
+        }
+
+        UserUploadInfo condition = new UserUploadInfo();
+        List<Long> fileIdList = new ArrayList<>();
+
+        for (String checkId : checkIdList) {
+            if (StringUtils.contains(checkId, UploadUserInfoUtil.BEFORE)) {
+                String wechatCode = checkId.replaceFirst(UploadUserInfoUtil.BEFORE, StringUtil.BLANK);
+                condition.setWechatCode(wechatCode);
+                userUploadInfoDao.findOne(Example.of(condition))
+                        .ifPresent( userUploadInfo -> {
+                            addBefore(userUploadInfo, fileIdList);
+                            if (!CollectionUtils.isEmpty(fileIdList)) {
+                                batchDeleteFileAddr(fileIdList);
+                            }
+                            userUploadInfo.setBeforeImg1(null);
+                            userUploadInfo.setBeforeImg2(null);
+                            userUploadInfo.setBeforeVideo1(null);
+                            userUploadInfo.setBeforeVideo2(null);
+                            userUploadInfo.setBeforeVideoImg1(null);
+                            userUploadInfo.setBeforeVideoImg2(null);
+                            userUploadInfoDao.save(userUploadInfo);
+                        });
+            } else if (StringUtils.contains(checkId, UploadUserInfoUtil.INSTALL)) {
+                String wechatCode = checkId.replaceFirst(UploadUserInfoUtil.INSTALL, StringUtil.BLANK);
+                condition.setWechatCode(wechatCode);
+                userUploadInfoDao.findOne(Example.of(condition))
+                        .ifPresent( userUploadInfo -> {
+                            addInstall(userUploadInfo, fileIdList);
+                            if (!CollectionUtils.isEmpty(fileIdList)) {
+                                batchDeleteFileAddr(fileIdList);
+                            }
+                            userUploadInfo.setInstallImg1(null);
+                            userUploadInfo.setInstallImg2(null);
+                            userUploadInfo.setInstallVideo1(null);
+                            userUploadInfo.setInstallVideo2(null);
+                            userUploadInfo.setInstallVideo3(null);
+                            userUploadInfo.setInstallVideo4(null);
+                            userUploadInfo.setInstallVideoImg1(null);
+                            userUploadInfo.setInstallVideoImg2(null);
+                            userUploadInfo.setInstallVideoImg3(null);
+                            userUploadInfo.setInstallVideoImg4(null);
+                            userUploadInfoDao.save(userUploadInfo);
+                        });
+            } else if (StringUtils.contains(checkId, UploadUserInfoUtil.DISPLAY)) {
+                String wechatCode = checkId.replaceFirst(UploadUserInfoUtil.DISPLAY, StringUtil.BLANK);
+                condition.setWechatCode(wechatCode);
+                userUploadInfoDao.findOne(Example.of(condition))
+                        .ifPresent( userUploadInfo -> {
+                            addDisplay(userUploadInfo, fileIdList);
+                            if (!CollectionUtils.isEmpty(fileIdList)) {
+                                batchDeleteFileAddr(fileIdList);
+                            }
+                            userUploadInfo.setDisplayImg1(null);
+                            userUploadInfo.setDisplayImg2(null);
+                            userUploadInfo.setDisplayImg3(null);
+                            userUploadInfo.setDisplayImg4(null);
+                            userUploadInfo.setDisplayImg5(null);
+                            userUploadInfo.setDisplayImg6(null);
+                            userUploadInfo.setDisplayVideo1(null);
+                            userUploadInfo.setDisplayVideo2(null);
+                            userUploadInfo.setDisplayVideo3(null);
+                            userUploadInfo.setDisplayVideo4(null);
+                            userUploadInfo.setDisplayVideo5(null);
+                            userUploadInfo.setDisplayVideo6(null);
+                            userUploadInfo.setDisplayVideoImg1(null);
+                            userUploadInfo.setDisplayVideoImg2(null);
+                            userUploadInfo.setDisplayVideoImg3(null);
+                            userUploadInfo.setDisplayVideoImg4(null);
+                            userUploadInfo.setDisplayVideoImg5(null);
+                            userUploadInfo.setDisplayVideoImg6(null);
+                            userUploadInfoDao.save(userUploadInfo);
+                        });
+            } else if (StringUtils.contains(checkId, UploadUserInfoUtil.DISPOSE)) {
+                String wechatCode = checkId.replaceFirst(UploadUserInfoUtil.DISPOSE, StringUtil.BLANK);
+                condition.setWechatCode(wechatCode);
+                userUploadInfoDao.findOne(Example.of(condition))
+                        .ifPresent( userUploadInfo -> {
+                            addDispose(userUploadInfo, fileIdList);
+                            if (!CollectionUtils.isEmpty(fileIdList)) {
+                                batchDeleteFileAddr(fileIdList);
+                            }
+                            userUploadInfo.setDisposeVideo1(null);
+                            userUploadInfo.setDisposeVideo2(null);
+                            userUploadInfo.setDisposeVideo3(null);
+                            userUploadInfo.setDisposeVideo4(null);
+                            userUploadInfo.setDisposeVideo5(null);
+                            userUploadInfo.setDisposeVideo6(null);
+                            userUploadInfo.setDisposeVideoImg1(null);
+                            userUploadInfo.setDisposeVideoImg2(null);
+                            userUploadInfo.setDisposeVideoImg3(null);
+                            userUploadInfo.setDisposeVideoImg4(null);
+                            userUploadInfo.setDisposeVideoImg5(null);
+                            userUploadInfo.setDisposeVideoImg6(null);
+                            userUploadInfoDao.save(userUploadInfo);
+                        });
+            }
+        }
+    }
+
+    private void batchDeleteFileAddr(List<Long> fieldList) {
+        if (CollectionUtils.isEmpty(fieldList)) {
+            return;
+        }
+        List<FileAddr> fileAddrList = fileAddrDao.findAllById(fieldList);
+        fileAddrDao.deleteAll(fileAddrList);
     }
 }

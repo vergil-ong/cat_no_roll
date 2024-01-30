@@ -10,8 +10,10 @@ import com.github.ong.model.h2.AdminUploadVideo;
 import com.github.ong.model.h2.FileAddr;
 import com.github.ong.utils.AliyunUtil;
 import com.github.ong.utils.FileUtil;
+import com.github.ong.utils.UploadUserInfoUtil;
 import com.github.ong.vo.AdminUploadVideoVo;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -68,28 +70,7 @@ public class AdminUploadVideoService {
 
         List<AdminUploadVideoVo> adminUploadVideoVoList = new ArrayList<>(videoList.size());
         for (AdminUploadVideo adminUploadVideo : videoList) {
-            AdminUploadVideoVo adminUploadVideoVo = new AdminUploadVideoVo();
-            adminUploadVideoVo.setAdminUploadVideo(adminUploadVideo);
-            FileAddr videoFileAddr = fileAddrMap.get(adminUploadVideo.getVideoId());
-            if (Objects.nonNull(videoFileAddr)) {
-                if (WholeAddr.SSO.getCode().equals(videoFileAddr.getWholeAddr())) {
-                    adminUploadVideoVo.setVideoUrl(AliyunUtil.SSO_ROOT + videoFileAddr.getAddr());
-                    adminUploadVideoVo.setVideoFileName(adminUploadVideo.getId() + FileUtil.DOT + FileUtil.getFileSuffix(videoFileAddr.getOriginalFileName()));
-                } else {
-                    adminUploadVideoVo.setVideoUrl(videoFileAddr.getAddr());
-                    adminUploadVideoVo.setVideoFileName(videoFileAddr.getOriginalFileName());
-                }
-            }
-
-            FileAddr imgFileAddr = fileAddrMap.get(adminUploadVideo.getVideoImgId());
-            if (Objects.nonNull(imgFileAddr)) {
-                if (WholeAddr.SSO.getCode().equals(imgFileAddr.getWholeAddr())) {
-                    adminUploadVideoVo.setImgUrl(AliyunUtil.SSO_ROOT + imgFileAddr.getAddr());
-                } else {
-                    adminUploadVideoVo.setImgUrl(imgFileAddr.getAddr());
-                }
-
-            }
+            AdminUploadVideoVo adminUploadVideoVo = UploadUserInfoUtil.getAdminUploadVideoVo(adminUploadVideo, fileAddrMap);
             adminUploadVideoVoList.add(adminUploadVideoVo);
         }
         return adminUploadVideoVoList;
@@ -130,6 +111,36 @@ public class AdminUploadVideoService {
             fileAddrDao.deleteAll(fileAddrList);
         }
         adminUploadVideoDao.delete(adminUploadVideo);
+    }
+
+    public void deleteVideo(String wechatCode) {
+        AdminUploadVideo condition = new AdminUploadVideo();
+        condition.setWechatCode(wechatCode);
+
+        List<AdminUploadVideo> adminUploadVideoList = adminUploadVideoDao.findAll(Example.of(condition));
+        if (CollectionUtils.isEmpty(adminUploadVideoList)) {
+            return;
+        }
+
+        List<Long> fileIdList = new ArrayList<>();
+        for (AdminUploadVideo adminUploadVideo : adminUploadVideoList) {
+            Long videoId = adminUploadVideo.getVideoId();
+            if (Objects.nonNull(videoId)) {
+                fileIdList.add(videoId);
+            }
+
+            Long videoImgId = adminUploadVideo.getVideoImgId();
+            if (Objects.nonNull(videoImgId)) {
+                fileIdList.add(videoImgId);
+            }
+
+            adminUploadVideoDao.delete(adminUploadVideo);
+        }
+
+        List<FileAddr> fileAddrList = fileAddrDao.findAllById(fileIdList);
+        fileAddrDao.deleteAll(fileAddrList);
+
+
     }
 
     public void increaseDownload(Long adminUploadId) {

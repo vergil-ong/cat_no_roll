@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminViewController {
 
     @RequestMapping("/upload")
-    public String initCode() {
+    public String initUpload() {
         return "admin/upload";
+    }
+
+    @RequestMapping("/download")
+    public String initDownload() {
+        return "admin/download";
     }
 }

@@ -6,6 +6,8 @@
     <title>猫不卷</title>
     <script src='/static/js/jquery.js'></script>
     <script src="/static/js/download.js"></script>
+    <script src="/static/js/common.js?v=202401231214"></script>
+
     <link rel="stylesheet" href='/static/css/common.css?v=20240122'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
 
@@ -38,7 +40,7 @@
             font-size: 1.5rem;
             background-color: var(--yellow-color);
             border-radius: 20px;
-            width: 100px;
+            width: 150px;
         }
     </style>
 </head>
@@ -138,6 +140,10 @@
     function downloadVideo() {
         let ua = window.navigator.userAgent.toLowerCase()
         if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+            if (ua.match(/(iphone|ipod|ipad);?/i)) {
+                alert('请使用浏览器打开')
+                return false;
+            }
             // alert('这个是微信')
             window.location.href = '/view/download/forward?forwardUrl=' + window.location.href
             return false;
@@ -161,7 +167,16 @@
                     }
                 })
 
-                download(currentImg.data('video-url'), index+'.mp4', 'application/octet-stream')
+                let fileSuffix = getFileSuffix(currentImg.data('video-url'));
+                let fileType = 'application/octet-stream'
+                if (fileSuffix === 'mp4') {
+                    fileType = 'video/mp4'
+                } else if (suffix === 'mov') {
+                    fileType =  'video/quicktime'
+                }
+
+                let fileName = index+'.'+fileSuffix
+                download(currentImg.data('video-url'), index+'.'+fileSuffix, fileType)
             }
         })
     }
