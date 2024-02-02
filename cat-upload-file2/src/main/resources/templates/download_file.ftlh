@@ -169,11 +169,11 @@
 
                 let fileSuffix = getFileSuffix(currentImg.data('video-url'));
                 let fileType = 'application/octet-stream'
-                if (fileSuffix === 'mp4') {
-                    fileType = 'video/mp4'
-                } else if (suffix === 'mov') {
-                    fileType =  'video/quicktime'
-                }
+                // if (fileSuffix === 'mp4') {
+                //     fileType = 'video/mp4'
+                // } else if (suffix === 'mov') {
+                //     fileType =  'video/quicktime'
+                // }
 
                 let fileName = index+'.'+fileSuffix
                 download(currentImg.data('video-url'), index+'.'+fileSuffix, fileType)
