@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>猫不卷</title>
     <script src='/static/js/jquery.js'></script>
-    <script src='/static/js/fakeLoader.min.js'></script>
+    <script src='/static/js/fakeLoader.js'></script>
     <script src='/static/js/bootstrap.bundle.js'></script>
     <script src="/static/js/common.js?v=202401231214"></script>
     <script src="/static/js/download.js"></script>
@@ -13,7 +13,7 @@
     <script src="/static/js/bootstrap-table.min.js"></script>
     <script src="/static/js/bootstrap-table-zh-CN.js"></script>
 
-    <link rel="stylesheet" href='/static/css/common.css?v=20240122'>
+    <link rel="stylesheet" href='/static/css/common.css?v=20240202'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
     <link rel="stylesheet" href='/static/css/fakeLoader.min.css'>
     <link rel="stylesheet" href='/static/css/bootstrap-table.min.css'>
@@ -133,28 +133,31 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="admin-top-logo" style="z-index: 0;position: static">
+<div class="container fixed-top" style="background-color: black">
+    <div class="admin-top-logo">
         <img src="/static/imgs/logo.jpg">
+    </div>
+    <div>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <div class="form-inline wechat-search">
+                    <input class="search-input" id="wechat-code-input" type="text" placeholder="搜索微信号">
+                    <button type="button" onclick="search()">搜索</button>
+                </div>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="search-btn" onclick="batchDownload()">下载</button>
+                <button type="button" class="search-btn search-btn-red" onclick="batchDelete()">删除</button>
+            </div>
+        </div>
+        <div class="row" style="height: 10px;border-bottom: 2px solid var(--yellow-color);padding-bottom: 30px"></div>
     </div>
 </div>
 
-<div class="container" style="margin-top: -35px">
-    <div class="row justify-content-center">
-        <div class="col-auto">
-            <div class="form-inline wechat-search">
-                <input class="search-input" id="wechat-code-input" type="text" placeholder="搜索微信号">
-                <button type="button" onclick="search()">搜索</button>
-            </div>
-        </div>
-        <div class="col-auto">
-            <button type="button" class="search-btn" onclick="batchDownload()">下载</button>
-            <button type="button" class="search-btn search-btn-red" onclick="batchDelete()">删除</button>
-        </div>
-    </div>
-    <div class="row" style="height: 10px;border-bottom: 2px solid var(--yellow-color);padding-bottom: 30px"></div>
-</div>
-<div class="container" >
+<#--<div class="container" style="margin-top: -35px">
+
+</div>-->
+<div class="container" style="margin-top: 180px">
     <table class="table" id="tb">
     </table>
 </div>
@@ -705,7 +708,7 @@
             "x-oss-forbid-overwrite": "true",
         };
 
-        async function put(file, wechatCode, fileName) {
+        async function put(file, wechatCode, fileName, fileIndex, fileLength) {
             try {
                 const name = wechatCode + "/" + fileName;
                 // 获取DOM。
@@ -713,6 +716,8 @@
                     // 获取分片上传进度、断点和返回值。
                     progress: (p, cpt, res) => {
                         console.log(p);
+                        let percentStr = Number(p * 100).toFixed(1) + "%"
+                        $(".fl-text").text('正在上传'+(fileIndex+1)+'/'+fileLength+' 进度 '+percentStr)
                     },
                     // 设置并发上传的分片数量。
                     parallel: 4,
@@ -749,7 +754,7 @@
                 let fileName = files[i].name;
                 let fileExt = fileName.substring(fileName.lastIndexOf("."));
                 let newFileName = uuidC() + fileExt
-                await put(files[i], wechatCode, newFileName)
+                await put(files[i], wechatCode, newFileName, i, files.length)
                 let newFileKey = wechatCode + "/" + newFileName
                 fileUrlArray.push(newFileKey)
                 fileNameArray.push(newFileName)

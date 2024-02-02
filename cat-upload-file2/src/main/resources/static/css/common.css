@@ -108,3 +108,14 @@ body {
     font-size: 20px;
     font-weight: bold;
 }
+
+.fl-text {
+    position: fixed;
+    height: 50px;
+    width: 200px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    top: calc(50% + 50px);
+    left: calc(50% - 50px/2);
+}
