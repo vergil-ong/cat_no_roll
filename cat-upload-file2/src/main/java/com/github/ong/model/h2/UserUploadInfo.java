@@ -154,4 +154,14 @@ public class UserUploadInfo {
 
     @Column(name = "dispose_video_img_6")
     private Long disposeVideoImg6;
+
+    /**
+     * 1 变化了
+     * 0 没变化
+     */
+    @Column(name = "file_change")
+    private Integer fileChange;
+
+    @Column(name = "zip_url")
+    private String zipUrl;
 }

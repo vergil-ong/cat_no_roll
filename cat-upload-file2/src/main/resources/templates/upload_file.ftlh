@@ -1249,7 +1249,7 @@
         "x-oss-forbid-overwrite": "true",
     };
 
-    async function put(file, wechatCode, fileName, fileId, fileIndex) {
+    async function put(file, wechatCode, middleDir, fileName, fileId, fileIndex) {
         try {
             // object表示上传到OSS的文件名称。
             // file表示浏览器中需要上传的文件，支持HTML5 file和Blob类型。
@@ -1264,7 +1264,7 @@
                 canvasVideo.width(), canvasVideo.height())
             waveVideo.init()
 
-            const name = wechatCode + "/" + fileName;
+            const name = wechatCode + "/" + middleDir + "/" + fileName;
             // let fileSuffix = getFileSuffix(fileName);
             // let fileMineType = getFileMineType(fileSuffix);
             // 获取DOM。
@@ -1335,9 +1335,15 @@
             let fileName = files[index].name;
             let fileExt = fileName.substring(fileName.lastIndexOf("."));
             let newFileName = uuidC() + fileExt
-            await put(files[index], wechatCode, newFileName, fileId, emptyImgArray[index])
+            let middleDir = ''
+            if (fileId === 'uploadImg1') {
+                middleDir = '1before'
+            } else if (fileId === 'uploadImg3') {
+                middleDir = '3decorate'
+            }
+            await put(files[index], wechatCode, middleDir, newFileName, fileId, emptyImgArray[index])
             // console.log('put success')
-            let newFileKey = wechatCode + "/" + newFileName
+            let newFileKey = wechatCode + "/" + middleDir + "/" + newFileName
 
             var formData = new FormData();
             formData.append("fileUrl", newFileKey);
@@ -1408,9 +1414,20 @@
             let fileName = files[index].name;
             let fileExt = fileName.substring(fileName.lastIndexOf("."));
             let newFileName = uuidC() + fileExt
-            await put(files[index], wechatCode, newFileName, fileId, emptyVideoArray[index])
+            let middleDir = ''
+            if (fileId === 'uploadVideo1') {
+                middleDir = '1before'
+            } else if (fileId === 'uploadVideo2') {
+                middleDir = '2install'
+            } else if (fileId === 'uploadVideo3') {
+                middleDir = '3decorate'
+            } else if (fileId === 'uploadVideo4') {
+                middleDir = '4show'
+            }
+            await put(files[index], wechatCode, middleDir, newFileName, fileId, emptyVideoArray[index])
             // console.log('put success')
-            let newFileKey = wechatCode + "/" + newFileName
+
+            let newFileKey = wechatCode + "/" + middleDir + "/" + newFileName
 
             var formData = new FormData();
             formData.append("fileUrl", newFileKey);

@@ -145,81 +145,105 @@ public class UploadFileApiController {
         if (Objects.isNull(uploadFileIndex)){
             return fileUploadVo;
         }
+        boolean fileChange = false;
         switch (uploadFileIndex){
             case BEFORE_VIDEO_1:
                 userUploadInfo.setBeforeVideo1(videoFileAddr.getId());
                 userUploadInfo.setBeforeVideoImg1(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case BEFORE_VIDEO_2:
                 userUploadInfo.setBeforeVideo2(videoFileAddr.getId());
                 userUploadInfo.setBeforeVideoImg2(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case INSTALL_VIDEO_1:
                 userUploadInfo.setInstallVideo1(videoFileAddr.getId());
                 userUploadInfo.setInstallVideoImg1(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case INSTALL_VIDEO_2:
                 userUploadInfo.setInstallVideo2(videoFileAddr.getId());
                 userUploadInfo.setInstallVideoImg2(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case INSTALL_VIDEO_3:
                 userUploadInfo.setInstallVideo3(videoFileAddr.getId());
                 userUploadInfo.setInstallVideoImg3(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case INSTALL_VIDEO_4:
                 userUploadInfo.setInstallVideo4(videoFileAddr.getId());
                 userUploadInfo.setInstallVideoImg4(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_VIDEO_1:
                 userUploadInfo.setDisplayVideo1(videoFileAddr.getId());
                 userUploadInfo.setDisplayVideoImg1(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_VIDEO_2:
                 userUploadInfo.setDisplayVideo2(videoFileAddr.getId());
                 userUploadInfo.setDisplayVideoImg2(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_VIDEO_3:
                 userUploadInfo.setDisplayVideo3(videoFileAddr.getId());
                 userUploadInfo.setDisplayVideoImg3(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_VIDEO_4:
                 userUploadInfo.setDisplayVideo4(videoFileAddr.getId());
                 userUploadInfo.setDisplayVideoImg4(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_VIDEO_5:
                 userUploadInfo.setDisplayVideo5(videoFileAddr.getId());
                 userUploadInfo.setDisplayVideoImg5(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_VIDEO_6:
                 userUploadInfo.setDisplayVideo6(videoFileAddr.getId());
                 userUploadInfo.setDisplayVideoImg6(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPOSE_VIDEO_1:
                 userUploadInfo.setDisposeVideo1(videoFileAddr.getId());
                 userUploadInfo.setDisposeVideoImg1(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPOSE_VIDEO_2:
                 userUploadInfo.setDisposeVideo2(videoFileAddr.getId());
                 userUploadInfo.setDisposeVideoImg2(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPOSE_VIDEO_3:
                 userUploadInfo.setDisposeVideo3(videoFileAddr.getId());
                 userUploadInfo.setDisposeVideoImg3(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPOSE_VIDEO_4:
                 userUploadInfo.setDisposeVideo4(videoFileAddr.getId());
                 userUploadInfo.setDisposeVideoImg4(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPOSE_VIDEO_5:
                 userUploadInfo.setDisposeVideo5(videoFileAddr.getId());
                 userUploadInfo.setDisposeVideoImg5(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPOSE_VIDEO_6:
                 userUploadInfo.setDisposeVideo6(videoFileAddr.getId());
                 userUploadInfo.setDisposeVideoImg6(imageFileAddr.getId());
+                fileChange = true;
                 break;
             default:
                 break;
+        }
+        if (fileChange) {
+            userUploadInfo.setFileChange(1);
+        } else {
+            userUploadInfo.setFileChange(0);
         }
         userUploadInfoService.updateUserUploadInfo(userUploadInfo, wechatCode);
         return fileUploadVo;

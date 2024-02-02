@@ -12,6 +12,7 @@
     <script src="/static/js/aliyun-oss-sdk-6.18.1.min.js"></script>
     <script src="/static/js/bootstrap-table.min.js"></script>
     <script src="/static/js/bootstrap-table-zh-CN.js"></script>
+    <script src="/static/js/streamSaver.js"></script>
 
     <link rel="stylesheet" href='/static/css/common.css?v=20240202'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
@@ -231,7 +232,10 @@
                         let html = '<div class="row">'
                         html += '<div class="col-10">'
                         // html += '<span>' + value.wechatCode + '</span>'
-                        html += '<input type="checkbox" id="'+wechatCodeId+'" data-wechat-code="'+value.wechatCode+'" onclick="wechatCodeCheck(this)"><label style="margin-left: 10px" for="'+wechatCodeId+'">'+value.wechatCode+'</label>'
+                        html += '<input type="checkbox" class="wechat-code-chbox" ' +
+                            'id="'+wechatCodeId+'" data-wechat-code="'+value.wechatCode+'" ' +
+                            'data-zip-url="'+value.zipUrl+'"' +
+                            'onclick="wechatCodeCheck(this)"><label style="margin-left: 10px" for="'+wechatCodeId+'">'+value.wechatCode+'</label>'
                         html += '</div>'
                         html += '<div class="col-2">'
                         html += '</div>'
@@ -244,7 +248,7 @@
                         html += '       <div class="col-12">'
                         html += '           <div class="row">'
                         html += '           <div class="col-12">'
-                        html += '           <input type="checkbox" id="'+beforeCheckId+'"><label for="'+beforeCheckId+'">1.原场景</label>'
+                        html += '           <input type="checkbox" id="'+beforeCheckId+'" style="display: none"><label for="'+beforeCheckId+'">1.原场景</label>'
                         html += '           </div>'
                         html += '           </div>'
                         //安装前图片
@@ -298,7 +302,7 @@
                         html += '       <div class="col-12">'
                         html += '           <div class="row">'
                         html += '           <div class="col-12">'
-                        html += '           <input type="checkbox" id="'+installCheckId+'"><label for="'+installCheckId+'">2.安装</label>'
+                        html += '           <input type="checkbox" id="'+installCheckId+'" style="display: none"><label for="'+installCheckId+'">2.安装</label>'
                         html += '           </div>'
                         html += '           </div>'
                         //安装图片
@@ -360,7 +364,7 @@
                         html += '       <div class="col-12">'
                         html += '           <div class="row">'
                         html += '           <div class="col-12">'
-                        html += '           <input type="checkbox" id="'+displayCheckId+'"><label for="'+displayCheckId+'">3.展示</label>'
+                        html += '           <input type="checkbox" id="'+displayCheckId+'" style="display: none"><label for="'+displayCheckId+'">3.展示</label>'
                         html += '           </div>'
                         html += '           </div>'
                         //展示图片
@@ -462,7 +466,7 @@
                         html += '       <div class="col-12">'
                         html += '           <div class="row">'
                         html += '           <div class="col-12">'
-                        html += '           <input type="checkbox" id="'+disposeCheckId+'"><label for="'+disposeCheckId+'">4.布置</label>'
+                        html += '           <input type="checkbox" id="'+disposeCheckId+'" style="display: none"><label for="'+disposeCheckId+'">4.布置</label>'
                         html += '           </div>'
                         html += '           </div>'
                         //布置图片
@@ -611,11 +615,24 @@
             }
         }
 
+        function downloadFileByA(fileUrl, fileName) {
+            const link = document.createElement('a')
+            link.style.display = 'none'
+            link.setAttribute('href', fileUrl)
+            link.setAttribute('download', fileName)
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        }
+
         function batchDownload() {
-            $(".row-border input[type='checkbox']:checked").each(function (index, e) {
+            $(".wechat-code-chbox:checked").each(function (index, e) {
                 let eJq = $(e)
-                let checkId = eJq.prop("id")
-                $("."+checkId+"_data").each(function(imgIndex, imgEle){
+                let wechatCode = eJq.data('wechat-code')
+                let zipUrl = eJq.data('zip-url')
+                downloadFileByA('http://cat-no-roll.oss-cn-hangzhou.aliyuncs.com/'+zipUrl, wechatCode+".zip")
+                // download('http://cat-no-roll.oss-cn-hangzhou.aliyuncs.com/'+zipUrl, wechatCode+".zip", 'application/octet-stream')
+                /*$("."+checkId+"_data").each(function(imgIndex, imgEle){
                     let imgJq = $(imgEle)
                     let videoDownload = imgJq.data("video-download")
                     let imgDownload = imgJq.data("img-download")
@@ -629,16 +646,16 @@
                     }
                     let fileExt = downloadUrl.substring(downloadUrl.lastIndexOf("."));
                     // console.log("fileExt", fileExt, "downloadUrl", downloadUrl)
-                    /*const response = {
+                    /!*const response = {
                         "content-disposition": "attachment; filename="+(fileName + fileExt),
-                    };*/
-                    /*downloadUrl = downloadUrl.replaceAll('https://cat-no-roll.oss-cn-hangzhou.aliyuncs.com','')
+                    };*!/
+                    /!*downloadUrl = downloadUrl.replaceAll('https://cat-no-roll.oss-cn-hangzhou.aliyuncs.com','')
                     console.log('downloadUrl', downloadUrl)
-                    const url = client.signatureUrl(downloadUrl, { response });*/
+                    const url = client.signatureUrl(downloadUrl, { response });*!/
                     // console.log(url);
                     download(downloadUrl, fileName + fileExt, 'application/octet-stream')
                     // downloadFileReq(downloadUrl, fileName + fileExt)
-                })
+                })*/
             })
         }
 

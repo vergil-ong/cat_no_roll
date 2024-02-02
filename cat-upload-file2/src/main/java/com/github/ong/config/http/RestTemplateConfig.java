@@ -17,4 +17,12 @@ public class RestTemplateConfig {
         factory.setConnectTimeout(15 * 1000);
         return new RestTemplate(factory);
     }
+
+    @Bean(name = "zipRestTemplate")
+    public RestTemplate zipRestTemplate() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setReadTimeout(24 * 60 * 60 * 1000);
+        factory.setConnectTimeout(15 * 1000);
+        return new RestTemplate(factory);
+    }
 }

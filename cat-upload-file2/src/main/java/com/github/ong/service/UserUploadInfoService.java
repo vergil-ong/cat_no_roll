@@ -1,5 +1,6 @@
 package com.github.ong.service;
 
+import com.github.ong.config.http.OssClientConfig;
 import com.github.ong.dao.h2.AdminUploadVideoDao;
 import com.github.ong.dao.h2.FileAddrDao;
 import com.github.ong.dao.h2.UserUploadInfoDao;
@@ -8,6 +9,7 @@ import com.github.ong.enums.db.WholeAddr;
 import com.github.ong.model.h2.AdminUploadVideo;
 import com.github.ong.model.h2.FileAddr;
 import com.github.ong.model.h2.UserUploadInfo;
+import com.github.ong.model.sso.ZipInfo;
 import com.github.ong.qo.admin.UploadQo;
 import com.github.ong.utils.AliyunUtil;
 import com.github.ong.utils.BeanUtil;
@@ -26,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -58,6 +61,9 @@ public class UserUploadInfoService {
 
     @Resource
     private AdminUploadVideoDao adminUploadVideoDao;
+
+    @Resource
+    private SsoService ssoService;
 
     public UserUploadInfoVo getUploadInfo(String wechatCode) {
         UserUploadInfoVo resultVo = new UserUploadInfoVo();
@@ -177,40 +183,57 @@ public class UserUploadInfoService {
     }
 
     private void addBefore(UserUploadInfo userUploadInfo, List<Long> fileIdList) {
+        addBefore(userUploadInfo, fileIdList, true);
+    }
+
+    private void addBefore(UserUploadInfo userUploadInfo, List<Long> fileIdList, boolean includeVideoImg) {
         Optional.ofNullable(userUploadInfo.getBeforeImg1())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getBeforeImg2())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getBeforeVideo1())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getBeforeVideoImg1())
-                .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getBeforeVideo2())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getBeforeVideoImg2())
-                .ifPresent(fileIdList::add);
+        if (includeVideoImg) {
+            Optional.ofNullable(userUploadInfo.getBeforeVideoImg1())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getBeforeVideoImg2())
+                    .ifPresent(fileIdList::add);
+        }
     }
 
     private void addInstall(UserUploadInfo userUploadInfo, List<Long> fileIdList) {
+        addInstall(userUploadInfo, fileIdList, true);
+    }
+
+    private void addInstall(UserUploadInfo userUploadInfo, List<Long> fileIdList, boolean includeVideoImg) {
         Optional.ofNullable(userUploadInfo.getInstallVideo1())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getInstallVideoImg1())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getInstallVideo2())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getInstallVideoImg2())
-                .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getInstallVideo3())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getInstallVideoImg3())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getInstallVideo4())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getInstallVideoImg4())
-                .ifPresent(fileIdList::add);
+
+        if (includeVideoImg) {
+            Optional.ofNullable(userUploadInfo.getInstallVideoImg1())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getInstallVideoImg2())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getInstallVideoImg3())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getInstallVideoImg4())
+                    .ifPresent(fileIdList::add);
+        }
     }
 
     private void addDisplay(UserUploadInfo userUploadInfo, List<Long> fileIdList) {
+        addDisplay(userUploadInfo, fileIdList, true);
+    }
+
+    private void addDisplay(UserUploadInfo userUploadInfo, List<Long> fileIdList, boolean includeVideoImg) {
         Optional.ofNullable(userUploadInfo.getDisplayImg1())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayImg2())
@@ -225,31 +248,38 @@ public class UserUploadInfoService {
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo1())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayVideoImg1())
-                .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo2())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayVideoImg2())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo3())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayVideoImg3())
-                .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo4())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayVideoImg4())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo5())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayVideoImg5())
-                .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo6())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayVideoImg6())
-                .ifPresent(fileIdList::add);
+
+        if (includeVideoImg) {
+            Optional.ofNullable(userUploadInfo.getDisplayVideoImg1())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisplayVideoImg2())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisplayVideoImg3())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisplayVideoImg4())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisplayVideoImg5())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisplayVideoImg6())
+                    .ifPresent(fileIdList::add);
+        }
     }
 
     private void addDispose(UserUploadInfo userUploadInfo, List<Long> fileIdList) {
+        addDispose(userUploadInfo, fileIdList, true);
+    }
+
+    private void addDispose(UserUploadInfo userUploadInfo, List<Long> fileIdList, boolean includeVideoImg) {
         Optional.ofNullable(userUploadInfo.getDisposeVideo1())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisposeVideo2())
@@ -262,19 +292,20 @@ public class UserUploadInfoService {
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisposeVideo6())
                 .ifPresent(fileIdList::add);
-
-        Optional.ofNullable(userUploadInfo.getDisposeVideoImg1())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisposeVideoImg2())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisposeVideoImg3())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisposeVideoImg4())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisposeVideoImg5())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisposeVideoImg6())
-                .ifPresent(fileIdList::add);
+        if (includeVideoImg) {
+            Optional.ofNullable(userUploadInfo.getDisposeVideoImg1())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisposeVideoImg2())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisposeVideoImg3())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisposeVideoImg4())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisposeVideoImg5())
+                    .ifPresent(fileIdList::add);
+            Optional.ofNullable(userUploadInfo.getDisposeVideoImg6())
+                    .ifPresent(fileIdList::add);
+        }
     }
 
     private void setBefore(Map<Long, FileAddr> fileAddrMap, UserUploadInfo userUploadInfo, UserUploadInfoVo resultVo) {
@@ -810,5 +841,49 @@ public class UserUploadInfoService {
         }
         List<FileAddr> fileAddrList = fileAddrDao.findAllById(fieldList);
         fileAddrDao.deleteAll(fileAddrList);
+    }
+
+    public void zipUserUploadInfo() {
+        UserUploadInfo condition = new UserUploadInfo();
+        condition.setFileChange(1);
+        List<UserUploadInfo> userUploadInfoList = userUploadInfoDao.findAll(Example.of(condition));
+        if (CollectionUtils.isEmpty(userUploadInfoList)) {
+            log.info("userUploadInfoList is empty");
+            return;
+        }
+        log.info("userUploadInfoList size is {}", userUploadInfoList.size());
+
+        for (UserUploadInfo userUploadInfo : userUploadInfoList) {
+            List<Long> fileIdList = new ArrayList<>();
+            addBefore(userUploadInfo, fileIdList, false);
+            addInstall(userUploadInfo, fileIdList, false);
+            addDisplay(userUploadInfo, fileIdList, false);
+            addDispose(userUploadInfo, fileIdList, false);
+
+            if (CollectionUtils.isEmpty(fileIdList)) {
+                continue;
+            }
+
+            List<FileAddr> fileAddrList = fileAddrDao.findAllById(fileIdList);
+            if (CollectionUtils.isEmpty(fileAddrList)) {
+                continue;
+            }
+
+            List<String> pathList = fileAddrList
+                    .stream()
+                    .map(FileAddr::getAddr)
+                    .collect(Collectors.toList());
+
+            ZipInfo zipInfo = new ZipInfo();
+            zipInfo.setBucket(OssClientConfig.BUCKET_NAME);
+            zipInfo.setSourceFiles(pathList);
+            String zipPath = ssoService.zipFileDir(zipInfo, userUploadInfo.getWechatCode());
+            log.info("zipPath is {}", zipPath);
+            if (StringUtils.isNotBlank(zipPath)) {
+                userUploadInfo.setZipUrl(zipPath);
+                userUploadInfo.setFileChange(0);
+                userUploadInfoDao.save(userUploadInfo);
+            }
+        }
     }
 }
