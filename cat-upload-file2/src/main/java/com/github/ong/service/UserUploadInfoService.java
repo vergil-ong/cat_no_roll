@@ -854,6 +854,7 @@ public class UserUploadInfoService {
         log.info("userUploadInfoList size is {}", userUploadInfoList.size());
 
         for (UserUploadInfo userUploadInfo : userUploadInfoList) {
+            log.info("zip userUploadInfo id is {}", userUploadInfo.getId());
             List<Long> fileIdList = new ArrayList<>();
             addBefore(userUploadInfo, fileIdList, false);
             addInstall(userUploadInfo, fileIdList, false);

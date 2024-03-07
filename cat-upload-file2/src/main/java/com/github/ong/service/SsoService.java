@@ -33,30 +33,35 @@ public class SsoService {
     private ObjectMapper objectMapper;
 
     public String zipFileDir(ZipInfo zipInfo, String wechatCode) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        String jsonStr;
         try {
-            jsonStr = objectMapper.writeValueAsString(zipInfo);
-        } catch (JsonProcessingException e) {
-            log.info("JsonProcessingException exception {}", ExceptionUtils.getStackTrace(e));
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String jsonStr;
+            try {
+                jsonStr = objectMapper.writeValueAsString(zipInfo);
+            } catch (JsonProcessingException e) {
+                log.info("JsonProcessingException exception {}", ExceptionUtils.getStackTrace(e));
+                return null;
+            }
+
+            HttpEntity<String> request = new HttpEntity<>(jsonStr, headers);
+
+            ResponseEntity<String> responseEntity = zipRestTemplate.postForEntity(AliyunUtil.FUNC_ROOT, request, String.class);
+            HttpHeaders responseEntityHeaders = responseEntity.getHeaders();
+            URI location = responseEntityHeaders.getLocation();
+            if (Objects.isNull(location)) {
+                return null;
+            }
+            String zipFilePath = location.getPath();
+            String fileKey = zipFilePath.replaceFirst("/", "");
+            log.info("fileKey is {}", fileKey);
+            String newFileKey = "output/" + wechatCode + ".zip";
+            ossClient.copyObject(OssClientConfig.BUCKET_NAME, fileKey, OssClientConfig.BUCKET_NAME, newFileKey);
+            ossClient.deleteObject(OssClientConfig.BUCKET_NAME, fileKey);
+            return newFileKey;
+        } catch (Exception e) {
+            log.info("zipFileDir exception {}", ExceptionUtils.getStackTrace(e));
             return null;
         }
-
-        HttpEntity<String> request = new HttpEntity<>(jsonStr, headers);
-
-        ResponseEntity<String> responseEntity = zipRestTemplate.postForEntity(AliyunUtil.FUNC_ROOT, request, String.class);
-        HttpHeaders responseEntityHeaders = responseEntity.getHeaders();
-        URI location = responseEntityHeaders.getLocation();
-        if (Objects.isNull(location)) {
-            return null;
-        }
-        String zipFilePath = location.getPath();
-        String fileKey = zipFilePath.replaceFirst("/", "");
-        log.info("fileKey is {}", fileKey);
-        String newFileKey = "output/" + wechatCode + ".zip";
-        ossClient.copyObject(OssClientConfig.BUCKET_NAME, fileKey, OssClientConfig.BUCKET_NAME, newFileKey);
-        ossClient.deleteObject(OssClientConfig.BUCKET_NAME, fileKey);
-        return newFileKey;
     }
 }
