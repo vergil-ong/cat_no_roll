@@ -86,33 +86,48 @@ public class UploadFileApiController {
         if (Objects.isNull(uploadFileIndex)){
             return AliyunUtil.SSO_ROOT + fileUrl;
         }
+
+        boolean fileChange = false;
         switch (uploadFileIndex){
             case BEFORE_IMG_1:
                 userUploadInfo.setBeforeImg1(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case BEFORE_IMG_2:
                 userUploadInfo.setBeforeImg2(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_IMG_1:
                 userUploadInfo.setDisplayImg1(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_IMG_2:
                 userUploadInfo.setDisplayImg2(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_IMG_3:
                 userUploadInfo.setDisplayImg3(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_IMG_4:
                 userUploadInfo.setDisplayImg4(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_IMG_5:
                 userUploadInfo.setDisplayImg5(imageFileAddr.getId());
+                fileChange = true;
                 break;
             case DISPLAY_IMG_6:
                 userUploadInfo.setDisplayImg6(imageFileAddr.getId());
+                fileChange = true;
                 break;
             default:
                 break;
+        }
+        if (fileChange) {
+            userUploadInfo.setFileChange(1);
+        } else {
+            userUploadInfo.setFileChange(0);
         }
         userUploadInfoService.updateUserUploadInfo(userUploadInfo, wechatCode);
 
