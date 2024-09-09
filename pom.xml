@@ -11,6 +11,7 @@
     <modules>
         <module>cat-upload-file</module>
         <module>cat-upload-file2</module>
+        <module>cat-upload-file3</module>
     </modules>
 
     <properties>
