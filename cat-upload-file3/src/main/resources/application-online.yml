@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: cat-upload-file-web3.online
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+file:
+  root-path: /Users/wangshuo/IdeaGitProjects/cat_no_roll/files3
+

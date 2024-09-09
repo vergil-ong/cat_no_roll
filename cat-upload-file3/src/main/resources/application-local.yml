@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: cat-upload-file-web3.local
+  freemarker:
+    cache: false
+    settings:
+      template_update_delay: 0
+file:
+  root-path: /Users/wangshuo/IdeaGitProjects/cat_no_roll/files3
+
+
