@@ -114,10 +114,15 @@
     </div>
     <div class="row">
         <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">图片参考</span>
-            </div>-->
             <div class="img-card no-pd">
+                <div class="row img-card-inner-text">
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">1.正视图</span>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <span class="img-card-text">2.侧视图</span>
+                    </div>
+                </div>
                 <#--demo-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
@@ -127,26 +132,48 @@
                         <img src="${systemUploadInfo.beforeImg2Url}">
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="img-card no-pd">
+                <#--demo-->
                 <div class="row img-card-inner-text">
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">正视图</span>
+                        <span class="img-card-text">1.正视左-右</span>
                     </div>
                     <div class="col-6 little-pd">
-                        <span class="img-card-text">侧视图</span>
+                        <span class="img-card-text">2.侧视远-近</span>
+                    </div>
+                </div>
+                <div class="row img-card-inner">
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.beforeVideoImg1Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo1Url}', this)" />
+                        </div>
+                    </div>
+                    <div class="col-6 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.beforeVideoImg2Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo2Url}', this)" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row row-pt">
         <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">图片预览</span>
-            </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg1" data-index="0" src="${userUploadInfo.beforeImg1Url?default('/static/imgs/emptyImg.png')}"
+                            <img class="uploadImg1" data-index="0" src="${userUploadInfo.beforeImg1Url?default('/static/imgs/image_preview.png')}"
                                  onclick="showImageModal(this)">
                         </div>
                         <div class="img-div">
@@ -181,44 +208,6 @@
                             <label class="upload-btn" for="uploadImg1" style="display: block;margin: 0">图片上传</label>
                             <input type="file" id="uploadImg1" accept="image/*" multiple class="no-display" onchange="uploadImg(this, 2)">
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row row-pt">
-        <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">视频参考</span>
-            </div>-->
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-<#--                        <div class="main" style="position:relative;">-->
-                            <div class="img">
-                                <img src="${systemUploadInfo.beforeVideoImg1Url}"/>
-                            </div>
-                            <div class="img-div">
-                                <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo1Url}', this)" />
-                            </div>
-<#--                        </div>-->
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.beforeVideoImg2Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.beforeVideo2Url}', this)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">正视视频</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">侧视视频</span>
                     </div>
                 </div>
             </div>
