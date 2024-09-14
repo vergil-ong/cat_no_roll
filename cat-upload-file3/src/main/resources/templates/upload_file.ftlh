@@ -174,7 +174,8 @@
                     <div class="col-6 little-pd">
                         <div class="img">
                             <img class="uploadImg1" data-index="0" src="${userUploadInfo.beforeImg1Url?default('/static/imgs/image_preview.png')}"
-                                 onclick="showImageModal(this)">
+                                 onclick="uploadImage(this, 'uploadImg1-1')">
+                            <input type="file" id="uploadImg1-1" accept="image/*" class="no-display" onchange="uploadImageFile(this, 'uploadImg1', 0)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -188,8 +189,9 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadImg1" data-index="1" src="${userUploadInfo.beforeImg2Url?default('/static/imgs/emptyImg.png')}"
-                                 onclick="showImageModal(this)">
+                            <img class="uploadImg1" data-index="1" src="${userUploadInfo.beforeImg2Url?default('/static/imgs/image_preview.png')}"
+                                 onclick="uploadImage(this, 'uploadImg1-2')">
+                            <input type="file" id="uploadImg1-2" accept="image/*" class="no-display" onchange="uploadImageFile(this, 'uploadImg1', 1)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -213,17 +215,15 @@
             </div>
         </div>
         <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">视频预览</span>
-            </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo1" data-index="0" src="${userUploadInfo.beforeVideoImg1Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.beforeVideo1Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo1" data-index="0" src="${userUploadInfo.beforeVideoImg1Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.beforeVideo1Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo1-1')">
+                            <input type="file" id="uploadVideo1-1" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo1', 0)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -237,9 +237,10 @@
                     </div>
                     <div class="col-6 little-pd">
                         <div class="img">
-                            <img class="uploadVideo1" data-index="1" src="${userUploadInfo.beforeVideoImg2Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.beforeVideo2Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo1" data-index="1" src="${userUploadInfo.beforeVideoImg2Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.beforeVideo2Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo1-2')">
+                            <input type="file" id="uploadVideo1-2" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo1', 1)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -1216,7 +1217,7 @@
                 // 刷新临时访问凭证的时间间隔，单位为毫秒。
                 refreshSTSTokenInterval: 300000,
                 // 填写Bucket名称。
-                bucket: 'cat-no-roll'
+                bucket: 'cat-roll'
             });
         })
     })
@@ -1288,6 +1289,16 @@
         }
     }
 
+    async function uploadImageFile(inputFile, fileId, imageArrayIndex) {
+        var files = $(inputFile)[0].files;
+        if (files.length === 0) {
+            return;
+        }
+        let emptyImgArray = []
+        emptyImgArray.push(imageArrayIndex)
+        await uploadFile(files, fileId, 0, emptyImgArray)
+    }
+
     async function uploadImg(inputFile, limit) {
         let fileId = $(inputFile).attr("id")
         var files = $(inputFile)[0].files;
@@ -1298,8 +1309,8 @@
         $("."+fileId).each(function(index, e){
             let currentImg = $(e)
             let src = currentImg.attr('src')
-            if (src === '/static/imgs/emptyImg.png'
-                || src === '/static/imgs/emptyVideo.png') {
+            if (src === '/static/imgs/image_preview.png'
+                || src === '/static/imgs/video_preview.png') {
                 emptyImgArray.push(currentImg.data('index'))
             }
         })
@@ -1367,6 +1378,16 @@
         }
     }
 
+    async function uploadSingleVideoFile(inputFile, fileId, imageArrayIndex) {
+        var files = $(inputFile)[0].files;
+        if (files.length === 0) {
+            return;
+        }
+        let emptyVideoArray = []
+        emptyVideoArray.push(imageArrayIndex)
+        await uploadVideoFile(files, fileId, 0, emptyVideoArray)
+    }
+
     async function uploadVideo(inputFile, limit) {
         let fileId = $(inputFile).attr("id")
         var files = $(inputFile)[0].files;
@@ -1377,8 +1398,8 @@
         $("."+fileId).each(function(index, e){
             let currentImg = $(e)
             let src = currentImg.attr('src')
-            if (src === '/static/imgs/emptyImg.png'
-                || src === '/static/imgs/emptyVideo.png') {
+            if (src === '/static/imgs/image_preview.png'
+                || src === '/static/imgs/video_preview.png') {
                 emptyVideoArray.push(currentImg.data('index'))
             }
         })
@@ -1479,12 +1500,13 @@
         $("#videoModal").modal('show')
     }
 
-    function showUserVideoModal(imgEle) {
+    function showUserVideoModal(imgEle, fileId) {
         let imgEleJq = $(imgEle)
         let imgSrc = imgEleJq.attr('src')
         let videoUrl = imgEleJq.data('video-url')
-        if (imgSrc === '/static/imgs/emptyVideo.png'
-            || videoUrl === '/static/imgs/emptyVideo.png') {
+        if (imgSrc === '/static/imgs/image_preview.png'
+            || videoUrl === '/static/imgs/video_preview.png') {
+            $("#"+fileId).click();
             return false
         }
         $("#modalVideo").attr('src', videoUrl)
@@ -1500,13 +1522,23 @@
         $("#imageModal").modal('show')
     }
 
+    function uploadImage(imgEle, fileId) {
+        let imgSrc = $(imgEle).attr('src')
+        if (imgSrc !== '/static/imgs/image_preview.png'
+            && imgSrc !== '/static/imgs/video_preview.png') {
+            return false
+        }
+        $("#"+fileId).click()
+    }
+
+
     function delImg(iconEle, imgType) {
         let img = $(iconEle).parent().parent().find(".img>img")
         let fileId = img.attr('class')
         let fileIndex = img.data('index')
-        let emptyImgPath = '/static/imgs/emptyImg.png'
+        let emptyImgPath = '/static/imgs/image_preview.png'
         if (imgType === 2) {
-            emptyImgPath = '/static/imgs/emptyVideo.png'
+            emptyImgPath = '/static/imgs/video_preview.png'
         }
         if (img.attr('src') === emptyImgPath) {
             return;

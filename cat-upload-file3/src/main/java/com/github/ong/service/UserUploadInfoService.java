@@ -2,18 +2,32 @@ package com.github.ong.service;
 
 import com.github.ong.dao.h2.FileAddrDao;
 import com.github.ong.dao.h2.UserUploadInfoDao;
+import com.github.ong.enums.biz.UploadFileIndex;
 import com.github.ong.enums.db.WholeAddr;
+import com.github.ong.model.h2.AdminUploadVideo;
 import com.github.ong.model.h2.FileAddr;
 import com.github.ong.model.h2.UserUploadInfo;
+import com.github.ong.qo.admin.UploadQo;
 import com.github.ong.utils.AliyunUtil;
+import com.github.ong.utils.BeanUtil;
+import com.github.ong.utils.StringUtil;
+import com.github.ong.utils.UploadUserInfoUtil;
+import com.github.ong.vo.AdminUploadVideoVo;
 import com.github.ong.vo.UserUploadInfoVo;
+import com.github.ong.vo.common.TablePageVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,6 +48,10 @@ public class UserUploadInfoService {
 
     @Resource
     private FileAddrDao fileAddrDao;
+
+    public File getFile(String code, String fileName) {
+        return new File(new File(getRootPath(), code), fileName);
+    }
 
     public UserUploadInfoVo getUploadInfo(String wechatCode) {
         UserUploadInfoVo resultVo = new UserUploadInfoVo();
@@ -319,4 +337,313 @@ public class UserUploadInfoService {
         }
         return fileAddr.getAddr();
     }
+
+    public void updateUserUploadInfo(UserUploadInfo userUploadInfo, String wechatCode) {
+        UserUploadInfo condition = new UserUploadInfo();
+        condition.setWechatCode(wechatCode);
+
+        UserUploadInfo userUploadInfoDB = userUploadInfoDao.findOne(Example.of(condition)).orElse(null);
+        if (Objects.isNull(userUploadInfoDB)) {
+            userUploadInfo.setWechatCode(wechatCode);
+            userUploadInfoDao.save(userUploadInfo);
+            return;
+        }
+        BeanUtil.copyPropertiesIgnoreNull(userUploadInfo, userUploadInfoDB);
+        userUploadInfoDao.save(userUploadInfoDB);
+    }
+
+    public void deleteImage(
+            UploadFileIndex uploadFileIndex,
+            String wechatCode) {
+        if (Objects.isNull(uploadFileIndex)) {
+            log.info("uploadFileIndex is null");
+            return;
+        }
+        UserUploadInfo condition = new UserUploadInfo();
+        condition.setWechatCode(wechatCode);
+        UserUploadInfo userUploadInfoDB = userUploadInfoDao.findOne(Example.of(condition)).orElse(null);
+        if (Objects.isNull(userUploadInfoDB)) {
+            return;
+        }
+        switch (uploadFileIndex) {
+            case BEFORE_IMG_1:
+                Long beforeImg1 = userUploadInfoDB.getBeforeImg1();
+                if (Objects.isNull(beforeImg1)) {
+                    break;
+                }
+                userUploadInfoDB.setBeforeImg1(null);
+                fileAddrDao.deleteById(beforeImg1);
+                break;
+            case BEFORE_IMG_2:
+                Long beforeImg2 = userUploadInfoDB.getBeforeImg2();
+                if (Objects.isNull(beforeImg2)) {
+                    break;
+                }
+                userUploadInfoDB.setBeforeImg2(null);
+                fileAddrDao.deleteById(beforeImg2);
+                break;
+            case BEFORE_VIDEO_1:
+                Long beforeVideo1 = userUploadInfoDB.getBeforeVideo1();
+                if (Objects.nonNull(beforeVideo1)) {
+                    fileAddrDao.deleteById(beforeVideo1);
+                    userUploadInfoDB.setBeforeVideo1(null);
+                }
+                Long beforeVideoImg1 = userUploadInfoDB.getBeforeVideoImg1();
+                if (Objects.nonNull(beforeVideoImg1)) {
+                    fileAddrDao.deleteById(beforeVideoImg1);
+                    userUploadInfoDB.setBeforeVideoImg1(null);
+                }
+                break;
+            case BEFORE_VIDEO_2:
+                Long beforeVideo2 = userUploadInfoDB.getBeforeVideo2();
+                if (Objects.nonNull(beforeVideo2)) {
+                    fileAddrDao.deleteById(beforeVideo2);
+                    userUploadInfoDB.setBeforeVideo2(null);
+                }
+                Long beforeVideoImg2 = userUploadInfoDB.getBeforeVideoImg2();
+                if (Objects.nonNull(beforeVideoImg2)) {
+                    fileAddrDao.deleteById(beforeVideoImg2);
+                    userUploadInfoDB.setBeforeVideoImg2(null);
+                }
+                break;
+            case INSTALL_VIDEO_1:
+                Long installVideo1 = userUploadInfoDB.getInstallVideo1();
+                if (Objects.nonNull(installVideo1)) {
+                    fileAddrDao.deleteById(installVideo1);
+                    userUploadInfoDB.setInstallVideo1(null);
+                }
+                Long installVideoImg1 = userUploadInfoDB.getInstallVideoImg1();
+                if (Objects.nonNull(installVideoImg1)) {
+                    fileAddrDao.deleteById(installVideoImg1);
+                    userUploadInfoDB.setInstallVideoImg1(null);
+                }
+                break;
+            case INSTALL_VIDEO_2:
+                Long installVideo2 = userUploadInfoDB.getInstallVideo2();
+                if (Objects.nonNull(installVideo2)) {
+                    fileAddrDao.deleteById(installVideo2);
+                    userUploadInfoDB.setInstallVideo2(null);
+                }
+                Long installVideoImg2 = userUploadInfoDB.getInstallVideoImg2();
+                if (Objects.nonNull(installVideoImg2)) {
+                    fileAddrDao.deleteById(installVideoImg2);
+                    userUploadInfoDB.setInstallVideoImg2(null);
+                }
+                break;
+            case INSTALL_VIDEO_3:
+                Long installVideo3 = userUploadInfoDB.getInstallVideo3();
+                if (Objects.nonNull(installVideo3)) {
+                    fileAddrDao.deleteById(installVideo3);
+                    userUploadInfoDB.setInstallVideo3(null);
+                }
+                Long installVideoImg3 = userUploadInfoDB.getInstallVideoImg3();
+                if (Objects.nonNull(installVideoImg3)) {
+                    fileAddrDao.deleteById(installVideoImg3);
+                    userUploadInfoDB.setInstallVideoImg3(null);
+                }
+                break;
+            case INSTALL_VIDEO_4:
+                Long installVideo4 = userUploadInfoDB.getInstallVideo4();
+                if (Objects.nonNull(installVideo4)) {
+                    fileAddrDao.deleteById(installVideo4);
+                    userUploadInfoDB.setInstallVideo4(null);
+                }
+                Long installVideoImg4 = userUploadInfoDB.getInstallVideoImg4();
+                if (Objects.nonNull(installVideoImg4)) {
+                    fileAddrDao.deleteById(installVideoImg4);
+                    userUploadInfoDB.setInstallVideoImg4(null);
+                }
+                break;
+            case DISPLAY_IMG_1:
+                Long displayImg1 = userUploadInfoDB.getDisplayImg1();
+                if (Objects.nonNull(displayImg1)) {
+                    fileAddrDao.deleteById(displayImg1);
+                    userUploadInfoDB.setDisplayImg1(displayImg1);
+                }
+                break;
+            case DISPLAY_IMG_2:
+                Long displayImg2 = userUploadInfoDB.getDisplayImg2();
+                if (Objects.nonNull(displayImg2)) {
+                    fileAddrDao.deleteById(displayImg2);
+                    userUploadInfoDB.setDisplayImg1(displayImg2);
+                }
+                break;
+            case DISPLAY_IMG_3:
+                Long displayImg3 = userUploadInfoDB.getDisplayImg3();
+                if (Objects.nonNull(displayImg3)) {
+                    fileAddrDao.deleteById(displayImg3);
+                    userUploadInfoDB.setDisplayImg3(displayImg3);
+                }
+                break;
+            case DISPLAY_IMG_4:
+                Long displayImg4 = userUploadInfoDB.getDisplayImg4();
+                if (Objects.nonNull(displayImg4)) {
+                    fileAddrDao.deleteById(displayImg4);
+                    userUploadInfoDB.setDisplayImg4(displayImg4);
+                }
+                break;
+            case DISPLAY_IMG_5:
+                Long displayImg5 = userUploadInfoDB.getDisplayImg5();
+                if (Objects.nonNull(displayImg5)) {
+                    fileAddrDao.deleteById(displayImg5);
+                    userUploadInfoDB.setDisplayImg5(displayImg5);
+                }
+                break;
+            case DISPLAY_IMG_6:
+                Long displayImg6 = userUploadInfoDB.getDisplayImg6();
+                if (Objects.nonNull(displayImg6)) {
+                    fileAddrDao.deleteById(displayImg6);
+                    userUploadInfoDB.setDisplayImg6(displayImg6);
+                }
+                break;
+            case DISPLAY_VIDEO_1:
+                Long displayVideo1 = userUploadInfoDB.getDisplayVideo1();
+                if (Objects.nonNull(displayVideo1)) {
+                    fileAddrDao.deleteById(displayVideo1);
+                    userUploadInfoDB.setDisplayVideo1(null);
+                }
+                Long displayVideoImg1 = userUploadInfoDB.getDisplayVideoImg1();
+                if (Objects.nonNull(displayVideoImg1)) {
+                    fileAddrDao.deleteById(displayVideoImg1);
+                    userUploadInfoDB.setDisplayVideoImg1(null);
+                }
+                break;
+            case DISPLAY_VIDEO_2:
+                Long displayVideo2 = userUploadInfoDB.getDisplayVideo2();
+                if (Objects.nonNull(displayVideo2)) {
+                    fileAddrDao.deleteById(displayVideo2);
+                    userUploadInfoDB.setDisplayVideo2(null);
+                }
+                Long displayVideoImg2 = userUploadInfoDB.getDisplayVideoImg2();
+                if (Objects.nonNull(displayVideoImg2)) {
+                    fileAddrDao.deleteById(displayVideoImg2);
+                    userUploadInfoDB.setDisplayVideoImg2(null);
+                }
+                break;
+            case DISPLAY_VIDEO_3:
+                Long displayVideo3 = userUploadInfoDB.getDisplayVideo3();
+                if (Objects.nonNull(displayVideo3)) {
+                    fileAddrDao.deleteById(displayVideo3);
+                    userUploadInfoDB.setDisplayVideo3(null);
+                }
+                Long displayVideoImg3 = userUploadInfoDB.getDisplayVideoImg3();
+                if (Objects.nonNull(displayVideoImg3)) {
+                    fileAddrDao.deleteById(displayVideoImg3);
+                    userUploadInfoDB.setDisplayVideoImg3(null);
+                }
+                break;
+            case DISPLAY_VIDEO_4:
+                Long displayVideo4 = userUploadInfoDB.getDisplayVideo4();
+                if (Objects.nonNull(displayVideo4)) {
+                    fileAddrDao.deleteById(displayVideo4);
+                    userUploadInfoDB.setDisplayVideo4(null);
+                }
+                Long displayVideoImg4 = userUploadInfoDB.getDisplayVideoImg4();
+                if (Objects.nonNull(displayVideoImg4)) {
+                    fileAddrDao.deleteById(displayVideoImg4);
+                    userUploadInfoDB.setDisplayVideoImg4(null);
+                }
+                break;
+            case DISPLAY_VIDEO_5:
+                Long displayVideo5 = userUploadInfoDB.getDisplayVideo5();
+                if (Objects.nonNull(displayVideo5)) {
+                    fileAddrDao.deleteById(displayVideo5);
+                    userUploadInfoDB.setDisplayVideo5(null);
+                }
+                Long displayVideoImg5 = userUploadInfoDB.getDisplayVideoImg5();
+                if (Objects.nonNull(displayVideoImg5)) {
+                    fileAddrDao.deleteById(displayVideoImg5);
+                    userUploadInfoDB.setDisplayVideoImg5(null);
+                }
+                break;
+            case DISPLAY_VIDEO_6:
+                Long displayVideo6 = userUploadInfoDB.getDisplayVideo6();
+                if (Objects.nonNull(displayVideo6)) {
+                    fileAddrDao.deleteById(displayVideo6);
+                    userUploadInfoDB.setDisplayVideo6(null);
+                }
+                Long displayVideoImg6 = userUploadInfoDB.getDisplayVideoImg6();
+                if (Objects.nonNull(displayVideoImg6)) {
+                    fileAddrDao.deleteById(displayVideoImg6);
+                    userUploadInfoDB.setDisplayVideoImg6(null);
+                }
+                break;
+            case DISPOSE_VIDEO_1:
+                Long disposeVideo1 = userUploadInfoDB.getDisposeVideo1();
+                if (Objects.nonNull(disposeVideo1)) {
+                    fileAddrDao.deleteById(disposeVideo1);
+                    userUploadInfoDB.setDisposeVideo1(disposeVideo1);
+                }
+                Long disposeVideoImg1 = userUploadInfoDB.getDisposeVideoImg1();
+                if (Objects.nonNull(disposeVideoImg1)) {
+                    fileAddrDao.deleteById(disposeVideoImg1);
+                    userUploadInfoDB.setDisposeVideoImg1(disposeVideoImg1);
+                }
+                break;
+            case DISPOSE_VIDEO_2:
+                Long disposeVideo2 = userUploadInfoDB.getDisposeVideo2();
+                if (Objects.nonNull(disposeVideo2)) {
+                    fileAddrDao.deleteById(disposeVideo2);
+                    userUploadInfoDB.setDisposeVideo2(disposeVideo2);
+                }
+                Long disposeVideoImg2 = userUploadInfoDB.getDisposeVideoImg2();
+                if (Objects.nonNull(disposeVideoImg2)) {
+                    fileAddrDao.deleteById(disposeVideoImg2);
+                    userUploadInfoDB.setDisposeVideoImg2(disposeVideoImg2);
+                }
+                break;
+            case DISPOSE_VIDEO_3:
+                Long disposeVideo3 = userUploadInfoDB.getDisposeVideo3();
+                if (Objects.nonNull(disposeVideo3)) {
+                    fileAddrDao.deleteById(disposeVideo3);
+                    userUploadInfoDB.setDisposeVideo3(disposeVideo3);
+                }
+                Long disposeVideoImg3 = userUploadInfoDB.getDisposeVideoImg3();
+                if (Objects.nonNull(disposeVideoImg3)) {
+                    fileAddrDao.deleteById(disposeVideoImg3);
+                    userUploadInfoDB.setDisposeVideoImg3(disposeVideoImg3);
+                }
+                break;
+            case DISPOSE_VIDEO_4:
+                Long disposeVideo4 = userUploadInfoDB.getDisposeVideo4();
+                if (Objects.nonNull(disposeVideo4)) {
+                    fileAddrDao.deleteById(disposeVideo4);
+                    userUploadInfoDB.setDisposeVideo4(disposeVideo4);
+                }
+                Long disposeVideoImg4 = userUploadInfoDB.getDisposeVideoImg4();
+                if (Objects.nonNull(disposeVideoImg4)) {
+                    fileAddrDao.deleteById(disposeVideoImg4);
+                    userUploadInfoDB.setDisposeVideoImg4(disposeVideoImg4);
+                }
+                break;
+            case DISPOSE_VIDEO_5:
+                Long disposeVideo5 = userUploadInfoDB.getDisposeVideo5();
+                if (Objects.nonNull(disposeVideo5)) {
+                    fileAddrDao.deleteById(disposeVideo5);
+                    userUploadInfoDB.setDisposeVideo5(disposeVideo5);
+                }
+                Long disposeVideoImg5 = userUploadInfoDB.getDisposeVideoImg5();
+                if (Objects.nonNull(disposeVideoImg5)) {
+                    fileAddrDao.deleteById(disposeVideoImg5);
+                    userUploadInfoDB.setDisposeVideoImg5(disposeVideoImg5);
+                }
+                break;
+            case DISPOSE_VIDEO_6:
+                Long disposeVideo6 = userUploadInfoDB.getDisposeVideo6();
+                if (Objects.nonNull(disposeVideo6)) {
+                    fileAddrDao.deleteById(disposeVideo6);
+                    userUploadInfoDB.setDisposeVideo6(disposeVideo6);
+                }
+                Long disposeVideoImg6 = userUploadInfoDB.getDisposeVideoImg6();
+                if (Objects.nonNull(disposeVideoImg6)) {
+                    fileAddrDao.deleteById(disposeVideoImg6);
+                    userUploadInfoDB.setDisposeVideoImg6(disposeVideoImg6);
+                }
+                break;
+            default:
+                break;
+        }
+        userUploadInfoDao.save(userUploadInfoDB);
+    }
+
 }
