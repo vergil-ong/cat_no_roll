@@ -440,4 +440,10 @@ public class UploadFileApiController {
 
         return ResultVo.success();
     }
+
+    @RequestMapping("/admin/user/video/list")
+    public TablePageVo<UserUploadInfoVo> listUserUploadVideo(UploadQo uploadQo) throws JsonProcessingException {
+        log.info("listUserUploadVideo uploadQo is {}", objectMapper.writeValueAsString(uploadQo));
+        return userUploadInfoService.pageUploadInfo(uploadQo);
+    }
 }

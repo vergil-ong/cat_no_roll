@@ -1,12 +1,15 @@
 package com.github.ong.service;
 
+import com.github.ong.dao.h2.AdminUploadVideoDao;
 import com.github.ong.dao.h2.FileAddrDao;
 import com.github.ong.dao.h2.UserUploadInfoDao;
 import com.github.ong.enums.biz.UploadFileIndex;
 import com.github.ong.enums.db.WholeAddr;
+import com.github.ong.http.OssClientConfig;
 import com.github.ong.model.h2.AdminUploadVideo;
 import com.github.ong.model.h2.FileAddr;
 import com.github.ong.model.h2.UserUploadInfo;
+import com.github.ong.model.sso.ZipInfo;
 import com.github.ong.qo.admin.UploadQo;
 import com.github.ong.utils.AliyunUtil;
 import com.github.ong.utils.BeanUtil;
@@ -48,6 +51,12 @@ public class UserUploadInfoService {
 
     @Resource
     private FileAddrDao fileAddrDao;
+
+    @Resource
+    private AdminUploadVideoDao adminUploadVideoDao;
+
+    @Resource
+    private SsoService ssoService;
 
     public File getFile(String code, String fileName) {
         return new File(new File(getRootPath(), code), fileName);
@@ -147,10 +156,6 @@ public class UserUploadInfoService {
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayImg4())
                 .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayImg5())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayImg6())
-                .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo1())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo2())
@@ -158,10 +163,6 @@ public class UserUploadInfoService {
         Optional.ofNullable(userUploadInfo.getDisplayVideo3())
                 .ifPresent(fileIdList::add);
         Optional.ofNullable(userUploadInfo.getDisplayVideo4())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayVideo5())
-                .ifPresent(fileIdList::add);
-        Optional.ofNullable(userUploadInfo.getDisplayVideo6())
                 .ifPresent(fileIdList::add);
 
         if (includeVideoImg) {
@@ -172,10 +173,6 @@ public class UserUploadInfoService {
             Optional.ofNullable(userUploadInfo.getDisplayVideoImg3())
                     .ifPresent(fileIdList::add);
             Optional.ofNullable(userUploadInfo.getDisplayVideoImg4())
-                    .ifPresent(fileIdList::add);
-            Optional.ofNullable(userUploadInfo.getDisplayVideoImg5())
-                    .ifPresent(fileIdList::add);
-            Optional.ofNullable(userUploadInfo.getDisplayVideoImg6())
                     .ifPresent(fileIdList::add);
         }
     }
@@ -646,4 +643,121 @@ public class UserUploadInfoService {
         userUploadInfoDao.save(userUploadInfoDB);
     }
 
+    public TablePageVo<UserUploadInfoVo> pageUploadInfo(UploadQo uploadQo) {
+        String wechatCode = uploadQo.getWechatCode();
+
+        Page<UserUploadInfo> userUploadInfoPage = userUploadInfoDao.findAll(((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            predicateList.add(criteriaBuilder.notEqual(root.get("wechatCode"), UploadUserInfoUtil.WECHAT_CODE_ADMIN));
+            if (StringUtils.isNotBlank(wechatCode)) {
+                predicateList.add(criteriaBuilder.equal(root.get("wechatCode"), wechatCode));
+            }
+            return criteriaQuery.where(predicateList.toArray(new Predicate[0])).getRestriction();
+        }), PageRequest.of(uploadQo.getPage(), uploadQo.getLimit()));
+        TablePageVo<UserUploadInfoVo> tablePageVo = new TablePageVo<>();
+        List<UserUploadInfo> userUploadInfoList = userUploadInfoPage.getContent();
+        if (CollectionUtils.isEmpty(userUploadInfoList)) {
+            tablePageVo.setRows(Collections.emptyList());
+            tablePageVo.setTotal((int) userUploadInfoPage.getTotalElements());
+            return tablePageVo;
+        }
+
+        List<Long> fileIdList = new ArrayList<>();
+        List<String> wechatCodeList = new ArrayList<>();
+        for (UserUploadInfo userUploadInfo : userUploadInfoList) {
+            addFieldList(userUploadInfo, fileIdList);
+            wechatCodeList.add(userUploadInfo.getWechatCode());
+        }
+
+        Map<String, List<AdminUploadVideo>> adminUploadVideoWechatMap = adminUploadVideoDao.findAll((root, criteriaQuery, criteriaBuilder) -> {
+                    List<Predicate> predicateList = new ArrayList<>();
+                    if (!CollectionUtils.isEmpty(wechatCodeList)) {
+                        CriteriaBuilder.In<Object> wechatCodeIn = criteriaBuilder.in(root.get("wechatCode"));
+                        for (String wechatCodeParam : wechatCodeList) {
+                            wechatCodeIn.value(wechatCodeParam);
+                        }
+                        predicateList.add(wechatCodeIn);
+                    }
+
+                    return criteriaQuery.where(predicateList.toArray(new Predicate[0])).getRestriction();
+                }).stream()
+                .map(adminUploadVideo -> {
+                    fileIdList.add(adminUploadVideo.getVideoImgId());
+                    fileIdList.add(adminUploadVideo.getVideoId());
+                    return adminUploadVideo;
+                })
+                .collect(Collectors.groupingBy(AdminUploadVideo::getWechatCode));
+
+
+        Map<Long, FileAddr> fileAddrMap = fileAddrDao.findAllById(fileIdList)
+                .stream()
+                .collect(Collectors.toMap(FileAddr::getId, Function.identity(), (a, b) -> b));
+        List<UserUploadInfoVo> userUploadInfoVoList = new ArrayList<>();
+        for (UserUploadInfo userUploadInfo : userUploadInfoList) {
+            UserUploadInfoVo userUploadInfoVo = new UserUploadInfoVo();
+            userUploadInfoVo.setUserUploadInfo(userUploadInfo);
+            setUserUploadInfoVo(fileAddrMap, userUploadInfo, userUploadInfoVo);
+            userUploadInfoVoList.add(userUploadInfoVo);
+
+            String wechatCodeItem = userUploadInfo.getWechatCode();
+            List<AdminUploadVideo> adminUploadVideoList = adminUploadVideoWechatMap.get(wechatCodeItem);
+            List<AdminUploadVideoVo> adminUploadVideoVoList = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(adminUploadVideoList)) {
+                for (AdminUploadVideo adminUploadVideo : adminUploadVideoList) {
+                    AdminUploadVideoVo adminUploadVideoVo = UploadUserInfoUtil.getAdminUploadVideoVo(adminUploadVideo, fileAddrMap);
+                    adminUploadVideoVoList.add(adminUploadVideoVo);
+                }
+                userUploadInfoVo.setAdminUploadVideoVoList(adminUploadVideoVoList);
+            }
+        }
+
+        tablePageVo.setRows(userUploadInfoVoList);
+        tablePageVo.setTotal((int) userUploadInfoPage.getTotalElements());
+
+        return tablePageVo;
+    }
+
+    public void zipUserUploadInfo() {
+        UserUploadInfo condition = new UserUploadInfo();
+        condition.setFileChange(1);
+        List<UserUploadInfo> userUploadInfoList = userUploadInfoDao.findAll(Example.of(condition));
+        if (CollectionUtils.isEmpty(userUploadInfoList)) {
+            log.info("userUploadInfoList is empty");
+            return;
+        }
+        log.info("userUploadInfoList size is {}", userUploadInfoList.size());
+
+        for (UserUploadInfo userUploadInfo : userUploadInfoList) {
+            log.info("zip userUploadInfo id is {}", userUploadInfo.getId());
+            List<Long> fileIdList = new ArrayList<>();
+            addBefore(userUploadInfo, fileIdList, false);
+            addInstall(userUploadInfo, fileIdList, false);
+            addDisplay(userUploadInfo, fileIdList, false);
+
+            if (CollectionUtils.isEmpty(fileIdList)) {
+                continue;
+            }
+
+            List<FileAddr> fileAddrList = fileAddrDao.findAllById(fileIdList);
+            if (CollectionUtils.isEmpty(fileAddrList)) {
+                continue;
+            }
+
+            List<String> pathList = fileAddrList
+                    .stream()
+                    .map(FileAddr::getAddr)
+                    .collect(Collectors.toList());
+
+            ZipInfo zipInfo = new ZipInfo();
+            zipInfo.setBucket(OssClientConfig.BUCKET_NAME);
+            zipInfo.setSourceFiles(pathList);
+            String zipPath = ssoService.zipFileDir(zipInfo, userUploadInfo.getWechatCode());
+            log.info("zipPath is {}", zipPath);
+            if (StringUtils.isNotBlank(zipPath)) {
+                userUploadInfo.setZipUrl(zipPath);
+                userUploadInfo.setFileChange(0);
+                userUploadInfoDao.save(userUploadInfo);
+            }
+        }
+    }
 }

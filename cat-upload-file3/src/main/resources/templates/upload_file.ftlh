@@ -268,19 +268,29 @@
                 <h1 >2.安装</h1>
             </div>
             <div class="d-flex justify-content-center subtitle-h">
-                <span class="h-subtitle">视频4个</span>
+                <span class="h-subtitle">4个视频</span>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">视频参考</span>
-            </div>-->
+        <div class="col-12">
             <div class="img-card no-pd">
-                <#--demo-->
+                <div class="row img-card-inner-text">
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">1.拆箱</span>
+                    </div>
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">2.配件包</span>
+                    </div>
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">3.入场</span>
+                    </div>
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">4.打孔</span>
+                    </div>
+                </div>
                 <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
                             <img src="${systemUploadInfo.installVideoImg1Url}"/>
                         </div>
@@ -288,7 +298,7 @@
                             <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo1Url}', this)" />
                         </div>
                     </div>
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
                             <img src="${systemUploadInfo.installVideoImg2Url}"/>
                         </div>
@@ -296,29 +306,37 @@
                             <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo2Url}', this)" />
                         </div>
                     </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">1. 拆箱</span>
+                    <div class="col-3 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.installVideoImg3Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo3Url}', this)" />
+                        </div>
                     </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">2. 入场</span>
+                    <div class="col-3 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.installVideoImg4Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo4Url}', this)" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">视频预览</span>
-            </div>-->
+    </div>
+    <div class="row ">
+        <div class="col-12">
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadVideo2" data-index="0" src="${userUploadInfo.installVideoImg1Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.installVideo1Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo2" data-index="0" src="${userUploadInfo.installVideoImg1Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.installVideo1Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo2-1')">
+                            <input type="file" id="uploadVideo2-1" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo2', 0)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -330,11 +348,12 @@
                             <span class="wave-proNum" id="proNumSp-uploadVideo2-0">0%</span>
                         </div>
                     </div>
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadVideo2" data-index="1" src="${userUploadInfo.installVideoImg2Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.installVideo2Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo2" data-index="1" src="${userUploadInfo.installVideoImg2Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.installVideo2Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo2-2')">
+                            <input type="file" id="uploadVideo2-2" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo2', 1)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -346,59 +365,12 @@
                             <span class="wave-proNum" id="proNumSp-uploadVideo2-1">0%</span>
                         </div>
                     </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                        <div class="div-btn-center">
-<#--                            <label class="upload-btn" for="uploadVideo2">视频上传</label>-->
-<#--                            <input type="file" id="uploadVideo2" accept="video/*" multiple class="no-display" onchange="uploadVideo(this)">-->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row ">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img src="${systemUploadInfo.installVideoImg3Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo3Url}', this)" />
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.installVideoImg4Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.installVideo4Url}', this)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">3. 打孔</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">4. 上螺丝</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo2" data-index="2" src="${userUploadInfo.installVideoImg3Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.installVideo3Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo2" data-index="2" src="${userUploadInfo.installVideoImg3Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.installVideo3Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo2-3')">
+                            <input type="file" id="uploadVideo2-3" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo2', 2)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -410,11 +382,12 @@
                             <span class="wave-proNum" id="proNumSp-uploadVideo2-2">0%</span>
                         </div>
                     </div>
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadVideo2" data-index="3" src="${userUploadInfo.installVideoImg4Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.installVideo4Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo2" data-index="3" src="${userUploadInfo.installVideoImg4Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.installVideo4Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo2-4')">
+                            <input type="file" id="uploadVideo2-4" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo2', 3)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -442,46 +415,56 @@
                 <h1 >3.展示</h1>
             </div>
             <div class="d-flex justify-content-center subtitle-h">
-                <span class="h-subtitle">图片6张 + 视频6个</span>
+                <span class="h-subtitle">4张图片 + 4个视频</span>
             </div>
         </div>
     </div>
     <div class="row row-pt">
-        <div class="col-6">
+        <div class="col-12">
             <#--<div class="text-center">
                 <span class="img-title">图片参考</span>
             </div>-->
             <div class="img-card no-pd">
                 <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <img src="${systemUploadInfo.displayImg1Url}">
+                <div class="row img-card-inner-text">
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">1.全景正视图</span>
                     </div>
-                    <div class="col-6 little-pd">
-                        <img src="${systemUploadInfo.displayImg2Url}">
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">2.全景侧视图</span>
+                    </div>
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">3.细节图</span>
+                    </div>
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">4.电箱图</span>
                     </div>
                 </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">1.正视图</span>
+                <div class="row img-card-inner">
+                    <div class="col-3 little-pd">
+                        <img src="${systemUploadInfo.displayImg1Url}">
                     </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">2.侧视图</span>
+                    <div class="col-3 little-pd">
+                        <img src="${systemUploadInfo.displayImg2Url}">
+                    </div>
+                    <div class="col-3 little-pd">
+                        <img src="${systemUploadInfo.displayImg3Url}">
+                    </div>
+                    <div class="col-3 little-pd">
+                        <img src="${systemUploadInfo.displayImg4Url}">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">图片预览</span>
-            </div>-->
+        <div class="col-12">
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="0" src="${userUploadInfo.displayImg1Url?default('/static/imgs/emptyImg.png')}"
-                                 onclick="showImageModal(this)"/>
+                            <img class="uploadImg3" data-index="0" src="${userUploadInfo.displayImg1Url?default('/static/imgs/image_preview.png')}"
+                                 onclick="uploadImage(this, 'uploadImg3-1')"/>
+                            <input type="file" id="uploadImg3-1" accept="image/*" class="no-display" onchange="uploadImageFile(this, 'uploadImg3', 0)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -493,10 +476,11 @@
                             <span class="wave-proNum" id="proNumSp-uploadImg3-0">0%</span>
                         </div>
                     </div>
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="1" src="${userUploadInfo.displayImg2Url?default('/static/imgs/emptyImg.png')}"
-                                 onclick="showImageModal(this)"/>
+                            <img class="uploadImg3" data-index="1" src="${userUploadInfo.displayImg2Url?default('/static/imgs/image_preview.png')}"
+                                 onclick="uploadImage(this, 'uploadImg3-2')"/>
+                            <input type="file" id="uploadImg3-2" accept="image/*" class="no-display" onchange="uploadImageFile(this, 'uploadImg3', 1)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -508,46 +492,11 @@
                             <span class="wave-proNum" id="proNumSp-uploadImg3-1">0%</span>
                         </div>
                     </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                        <div class="div-btn-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <img src="${systemUploadInfo.displayImg3Url}">
-                    </div>
-                    <div class="col-6 little-pd">
-                        <img src="${systemUploadInfo.displayImg4Url}">
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">3.细节</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">4.细节</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="2" src="${userUploadInfo.displayImg3Url?default('/static/imgs/emptyImg.png')}"
-                                 onclick="showImageModal(this)"/>
+                            <img class="uploadImg3" data-index="2" src="${userUploadInfo.displayImg3Url?default('/static/imgs/image_preview.png')}"
+                                 onclick="uploadImage(this, 'uploadImg3-3')"/>
+                            <input type="file" id="uploadImg3-3" accept="image/*" class="no-display" onchange="uploadImageFile(this, 'uploadImg3', 2)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -559,10 +508,11 @@
                             <span class="wave-proNum" id="proNumSp-uploadImg3-2">0%</span>
                         </div>
                     </div>
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadImg3" data-index="3" src="${userUploadInfo.displayImg4Url?default('/static/imgs/emptyImg.png')}"
-                                 onclick="showImageModal(this)"/>
+                            <img class="uploadImg3" data-index="3" src="${userUploadInfo.displayImg4Url?default('/static/imgs/image_preview.png')}"
+                                 onclick="uploadImage(this, 'uploadImg3-4')"/>
+                            <input type="file" id="uploadImg3-4" accept="image/*" class="no-display" onchange="uploadImageFile(this, 'uploadImg3', 3)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
@@ -577,71 +527,8 @@
                 </div>
                 <div class="row img-card-inner-text">
                     <div class="col-12 little-pd">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <img src="${systemUploadInfo.displayImg5Url}">
-                    </div>
-                    <div class="col-6 little-pd">
-                        <img src="${systemUploadInfo.displayImg6Url}">
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">5.电表箱</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">6.镜子</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadImg3" data-index="4" src="${userUploadInfo.displayImg5Url?default('/static/imgs/emptyImg.png')}"
-                                 onclick="showImageModal(this)"/>
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadImg3-4" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadImg3-4"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadImg3-4" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadImg3-4">0%</span>
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadImg3" data-index="5" src="${userUploadInfo.displayImg6Url?default('/static/imgs/emptyImg.png')}"
-                                 onclick="showImageModal(this)"/>
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 1)"></i>
-                        </div>'<div class="img-div" id="canvasDiv-uploadImg3-5" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadImg3-5"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadImg3-5" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadImg3-5">0%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
                         <label class="upload-btn" for="uploadImg3">图片上传</label>
-                        <input type="file" id="uploadImg3" accept="image/*" multiple class="no-display" onchange="uploadImg(this, 6)">
+                        <input type="file" id="uploadImg3" accept="image/*" multiple class="no-display" onchange="uploadImg(this, 4)">
                     </div>
                 </div>
             </div>
@@ -649,14 +536,25 @@
     </div>
     <#--展示视频-->
     <div class="row row-pt">
-        <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">视频参考</span>
-            </div>-->
+        <div class="col-12">
             <div class="img-card no-pd">
+                <div class="row img-card-inner-text">
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">1.正视-左右</span>
+                    </div>
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">2.侧视-远近</span>
+                    </div>
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">3.人物布置</span>
+                    </div>
+                    <div class="col-3 little-pd">
+                        <span class="img-card-text">4.电箱</span>
+                    </div>
+                </div>
                 <#--demo-->
                 <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
                             <img src="${systemUploadInfo.displayVideoImg1Url}"/>
                         </div>
@@ -664,7 +562,7 @@
                             <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo1Url}', this)" />
                         </div>
                     </div>
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
                             <img src="${systemUploadInfo.displayVideoImg2Url}"/>
                         </div>
@@ -672,29 +570,38 @@
                             <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo2Url}', this)" />
                         </div>
                     </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">1.正视平拍</span>
+                    <div class="col-3 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.displayVideoImg3Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo3Url}', this)" />
+                        </div>
                     </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">2.侧视推拉</span>
+                    <div class="col-3 little-pd">
+                        <div class="img">
+                            <img src="${systemUploadInfo.displayVideoImg4Url}"/>
+                        </div>
+                        <div class="img-div">
+                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo4Url}', this)" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-12">
             <#--<div class="text-center">
                 <span class="img-title">视频预览</span>
             </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
                 <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="0" src="${userUploadInfo.displayVideoImg1Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.displayVideo1Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo3" data-index="0" src="${userUploadInfo.displayVideoImg1Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo1Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo3-1')">
+                            <input type="file" id="uploadVideo3-1" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo3', 0)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -706,11 +613,12 @@
                             <span class="wave-proNum" id="proNumSp-uploadVideo3-0">0%</span>
                         </div>
                     </div>
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="1" src="${userUploadInfo.displayVideoImg2Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.displayVideo2Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo3" data-index="1" src="${userUploadInfo.displayVideoImg2Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo2Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo3-2')">
+                            <input type="file" id="uploadVideo3-2" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo3', 1)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -722,57 +630,12 @@
                             <span class="wave-proNum" id="proNumSp-uploadVideo3-1">0%</span>
                         </div>
                     </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                        <div class="div-btn-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img src="${systemUploadInfo.displayVideoImg3Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo3Url}', this)" />
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.displayVideoImg4Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo4Url}', this)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">3.细节平拍</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">4.细节竖拍</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo3" data-index="2" src="${userUploadInfo.displayVideoImg3Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.displayVideo3Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo3" data-index="2" src="${userUploadInfo.displayVideoImg3Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo3Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo3-3')">
+                            <input type="file" id="uploadVideo3-3" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo3', 2)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -784,11 +647,12 @@
                             <span class="wave-proNum" id="proNumSp-uploadVideo3-2">0%</span>
                         </div>
                     </div>
-                    <div class="col-6 little-pd">
+                    <div class="col-3 little-pd">
                         <div class="img">
-                            <img class="uploadVideo3" data-index="3" src="${userUploadInfo.displayVideoImg4Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.displayVideo4Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
+                            <img class="uploadVideo3" data-index="3" src="${userUploadInfo.displayVideoImg4Url?default('/static/imgs/video_preview.png')}"
+                                 data-video-url="${userUploadInfo.displayVideo4Url?default('/static/imgs/video_preview.png')}"
+                                 onclick="showUserVideoModal(this, 'uploadVideo3-4')">
+                            <input type="file" id="uploadVideo3-4" accept="video/*" class="no-display" onchange="uploadSingleVideoFile(this, 'uploadVideo3', 3)">
                         </div>
                         <div class="img-div">
                             <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
@@ -804,86 +668,8 @@
                 <div class="row img-card-inner-text">
                     <div class="col-12 little-pd">
                         <div class="div-btn-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.displayVideoImg5Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo5Url}', this)" />
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.displayVideoImg6Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.displayVideo6Url}', this)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">5.电箱拉合</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">6.镜子开合</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo3" data-index="4" src="${userUploadInfo.displayVideoImg5Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.displayVideo5Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadVideo3-4" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadVideo3-4"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadVideo3-4" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadVideo3-4">0%</span>
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo3" data-index="5" src="${userUploadInfo.displayVideoImg6Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.displayVideo6Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadVideo3-5" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadVideo3-5"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadVideo3-5" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadVideo3-5">0%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                        <div class="div-btn-center">
                             <label class="upload-btn" for="uploadVideo3">视频上传</label>
-                            <input type="file" id="uploadVideo3" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 6)">
+                            <input type="file" id="uploadVideo3" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 4)">
                         </div>
                     </div>
                 </div>
@@ -891,258 +677,10 @@
         </div>
     </div>
 
-    <div class="row row-pt-title">
-        <div class="col-12">
-            <div class="d-flex justify-content-center">
-                <h1 >4.布置</h1>
-            </div>
-            <div class="d-flex justify-content-center subtitle-h">
-                <span class="h-subtitle">[固定镜头，轮流换摆件] 视频6个</span>
-            </div>
-        </div>
-    </div>
-    <div class="row row-pt">
-        <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">视频参考</span>
-            </div>-->
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.disposeVideoImg1Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo1Url}', this)" />
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.disposeVideoImg2Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo2Url}', this)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">全景</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">特写1</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <#--<div class="text-center">
-                <span class="img-title">视频预览</span>
-            </div>-->
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo4" data-index="0" src="${userUploadInfo.disposeVideoImg1Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.disposeVideo1Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadVideo4-0" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadVideo4-0"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadVideo4-0" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadVideo4-0">0%</span>
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo4" data-index="1" src="${userUploadInfo.disposeVideoImg2Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.disposeVideo2Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadVideo4-1" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadVideo4-1"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadVideo4-1" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadVideo4-1">0%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                        <div class="div-btn-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.disposeVideoImg3Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo3Url}', this)" />
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.disposeVideoImg4Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo4Url}', this)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">特写2</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">特写3</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo4" data-index="2" src="${userUploadInfo.disposeVideoImg3Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.disposeVideo3Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadVideo4-2" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadVideo4-2"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadVideo4-2" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadVideo4-2">0%</span>
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo4" data-index="3" src="${userUploadInfo.disposeVideoImg4Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.disposeVideo4Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadVideo4-3" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadVideo4-3"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadVideo4-3" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadVideo4-3">0%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--demo-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.disposeVideoImg5Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo5Url}', this)" />
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img src="${systemUploadInfo.disposeVideoImg6Url}"/>
-                        </div>
-                        <div class="img-div">
-                            <img src="/static/imgs/play.png" class="img-play" onclick="showVideoModal('${systemUploadInfo.disposeVideo6Url}', this)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">特写4</span>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <span class="img-card-text">特写5</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="img-card no-pd">
-                <#--用户上传-->
-                <div class="row img-card-inner">
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo4" data-index="4" src="${userUploadInfo.disposeVideoImg5Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.disposeVideo5Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadVideo4-4" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadVideo4-4"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadVideo4-4" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadVideo4-4">0%</span>
-                        </div>
-                    </div>
-                    <div class="col-6 little-pd">
-                        <div class="img">
-                            <img class="uploadVideo4" data-index="5" src="${userUploadInfo.disposeVideoImg6Url?default('/static/imgs/emptyVideo.png')}"
-                                 data-video-url="${userUploadInfo.disposeVideo6Url?default('/static/imgs/emptyVideo.png')}"
-                                 onclick="showUserVideoModal(this)">
-                        </div>
-                        <div class="img-div">
-                            <i class="bi bi-x-circle-fill" onclick="delImg(this, 2)"></i>
-                        </div>
-                        <div class="img-div" id="canvasDiv-uploadVideo4-5" style="display: none">
-                            <canvas class="wave-canvas" id="canvas-uploadVideo4-5"></canvas>
-                        </div>
-                        <div class="img-div-num" id="proNum-uploadVideo4-5" style="display: none">
-                            <span class="wave-proNum" id="proNumSp-uploadVideo4-5">0%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row img-card-inner-text">
-                    <div class="col-12 little-pd">
-                        <label class="upload-btn" for="uploadVideo4">视频上传</label>
-                        <input type="file" id="uploadVideo4" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 6)">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row" style="margin-top: 50px">
-<#--        <div class="col-12">-->
-<#--            <button type="button" class="btn-bottom">通知PR同学</button>-->
-<#--        </div>-->
+        <div class="col-12">
+            <button type="button" class="btn-bottom">通知PR同学</button>
+        </div>
         <div class="col-12">
             <div class="text-center" style="margin-bottom: 20px">
                 <span class="wechat-bottom">猫不卷微信号:mbj6699</span>
@@ -1151,16 +689,6 @@
     </div>
 </div>
 
-<div class="footer">
-    <div class="row footer-row">
-        <div class="col-6 no-pd">
-            <button type="button" class="footer-btn">上传素材</button>
-        </div>
-        <div class="col-6 no-pd">
-            <button type="button" class="footer-btn" onclick="jumpDownload()">下载视频</button>
-        </div>
-    </div>
-</div>
 
 <div style="position: fixed;bottom: -100px">
     <video controls="controls" id="fileVideo" style="opacity: 0"></video>
@@ -1505,7 +1033,7 @@
         let imgSrc = imgEleJq.attr('src')
         let videoUrl = imgEleJq.data('video-url')
         if (imgSrc === '/static/imgs/image_preview.png'
-            || videoUrl === '/static/imgs/video_preview.png') {
+            || imgSrc === '/static/imgs/video_preview.png') {
             $("#"+fileId).click();
             return false
         }
