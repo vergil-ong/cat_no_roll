@@ -93,7 +93,7 @@ public class FileAddrService {
             return null;
         };
 
-        return outRestTemplate.execute(AliyunUtil.SSO_ROOT + fileUrl + "?x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast", HttpMethod.GET, null, responseExtractor);
+        return outRestTemplate.execute(AliyunUtil.SSO_ROOT + fileUrl + "?x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast,ar_auto", HttpMethod.GET, null, responseExtractor);
     }
 
     public void uploadSsoFile(File file, String fileKey) {

@@ -549,7 +549,7 @@
                         <span class="img-card-text">3.人物布置</span>
                     </div>
                     <div class="col-3 little-pd">
-                        <span class="img-card-text">4.电箱</span>
+                        <span class="img-card-text">4.电箱+镜子</span>
                     </div>
                 </div>
                 <#--demo-->
@@ -699,7 +699,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <video controls id="modalVideo" width="300" playsinline="true"></video>
+                <video controls id="modalVideo" width="300" playsinline="true" x5-video-orientation="portraint" x5-video-player-type="h5" autoplay></video>
             </div>
             <#--<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
