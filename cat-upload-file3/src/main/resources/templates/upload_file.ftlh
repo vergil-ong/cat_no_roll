@@ -9,7 +9,7 @@
     <script src="/static/js/common.js?v=202401301725"></script>
     <script src="/static/js/aliyun-oss-sdk-6.18.1.min.js"></script>
     <script src="/static/js/wave.js"></script>
-    <link rel="stylesheet" href='/static/css/common.css?v=202401221627'>
+    <link rel="stylesheet" href='/static/css/common.css?v=202409200931'>
     <link rel="stylesheet" href='/static/css/bootstrap.css'>
     <link rel="stylesheet" href='/static/css/bootstrap-icons.css'>
     <link rel="stylesheet" href='/static/css/wave.css'>
@@ -95,6 +95,10 @@
             height: 20px;
         }
 
+        .h140 {
+            height: 140px;
+        }
+
     </style>
 </head>
 <body>
@@ -170,7 +174,7 @@
         <div class="col-6">
             <div class="img-card no-pd">
                 <#--用户上传-->
-                <div class="row img-card-inner">
+                <div class="row img-card-inner h140">
                     <div class="col-6 little-pd">
                         <div class="img">
                             <img class="uploadImg1" data-index="0" src="${userUploadInfo.beforeImg1Url?default('/static/imgs/image_preview.png')}"
@@ -204,7 +208,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row img-card-inner-text">
+                <div class="row img-card-inner-text" style="padding-top: 0px">
                     <div class="col-12 little-pd">
                         <div class="div-btn-center">
                             <label class="upload-btn" for="uploadImg1" style="display: block;margin: 0">图片上传</label>
@@ -217,7 +221,7 @@
         <div class="col-6">
             <div class="img-card no-pd">
                 <#--用户上传-->
-                <div class="row img-card-inner">
+                <div class="row img-card-inner h140">
                     <div class="col-6 little-pd">
                         <div class="img">
                             <img class="uploadVideo1" data-index="0" src="${userUploadInfo.beforeVideoImg1Url?default('/static/imgs/video_preview.png')}"
@@ -253,7 +257,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row img-card-inner-text">
+                <div class="row img-card-inner-text" style="padding-top: 0px">
                     <div class="col-12 little-pd">
                         <label class="upload-btn" for="uploadVideo1">视频上传</label>
                         <input type="file" id="uploadVideo1" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 2)">
@@ -330,7 +334,7 @@
         <div class="col-12">
             <div class="img-card no-pd">
                 <#--用户上传-->
-                <div class="row img-card-inner">
+                <div class="row img-card-inner h140">
                     <div class="col-3 little-pd">
                         <div class="img">
                             <img class="uploadVideo2" data-index="0" src="${userUploadInfo.installVideoImg1Url?default('/static/imgs/video_preview.png')}"
@@ -400,7 +404,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row img-card-inner-text">
+                <div class="row img-card-inner-text" style="padding-top: 0px">
                     <div class="col-12 little-pd">
                         <label class="upload-btn" for="uploadVideo2">视频上传</label>
                         <input type="file" id="uploadVideo2" accept="video/*" multiple class="no-display" onchange="uploadVideo(this, 4)">
@@ -459,7 +463,7 @@
         <div class="col-12">
             <div class="img-card no-pd">
                 <#--用户上传-->
-                <div class="row img-card-inner">
+                <div class="row img-card-inner h140">
                     <div class="col-3 little-pd">
                         <div class="img">
                             <img class="uploadImg3" data-index="0" src="${userUploadInfo.displayImg1Url?default('/static/imgs/image_preview.png')}"
@@ -525,7 +529,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row img-card-inner-text">
+                <div class="row img-card-inner-text" style="padding-top: 0px">
                     <div class="col-12 little-pd">
                         <label class="upload-btn" for="uploadImg3">图片上传</label>
                         <input type="file" id="uploadImg3" accept="image/*" multiple class="no-display" onchange="uploadImg(this, 4)">
@@ -595,7 +599,7 @@
             </div>-->
             <div class="img-card no-pd">
                 <#--用户上传-->
-                <div class="row img-card-inner">
+                <div class="row img-card-inner h140">
                     <div class="col-3 little-pd">
                         <div class="img">
                             <img class="uploadVideo3" data-index="0" src="${userUploadInfo.displayVideoImg1Url?default('/static/imgs/video_preview.png')}"
@@ -665,7 +669,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row img-card-inner-text">
+                <div class="row img-card-inner-text" style="padding-top: 0px">
                     <div class="col-12 little-pd">
                         <div class="div-btn-center">
                             <label class="upload-btn" for="uploadVideo3">视频上传</label>
@@ -699,7 +703,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <video controls id="modalVideo" width="300" playsinline="true" x5-video-orientation="portraint" x5-video-player-type="h5" autoplay></video>
+                <video controls id="modalVideo" width="300"
+                       webkit-playsinline="true"
+                       playsinline="true"
+                       x-webkit-airplay="allow"
+                       x5-video-orientation="portraint"
+                       x5-video-player-type="h5"
+                       style="object-fit:fill"
+                       preload="auto"
+                       autoplay ></video>
             </div>
             <#--<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
